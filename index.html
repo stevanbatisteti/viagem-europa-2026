@@ -88,7 +88,6 @@
                         </div>
                     </div>
 
-                    <!-- TÍTULO ALTERADO DE Compromissos de Hoje para Roteiro -->
                     <div class="flex justify-between items-center pt-1">
                         <h5 class="font-bold text-slate-900 text-sm">Roteiro</h5>
                         <button onclick="switchTab('itinerary')" class="text-xs text-indigo-600 font-semibold">Gerenciar roteiro</button>
@@ -112,7 +111,7 @@
                     </button>
                 </div>
 
-                <!-- Horizontal Scrollable Day Selector (only date on button) -->
+                <!-- Horizontal Scrollable Day Selector -->
                 <div id="daysTabsContainer" class="flex space-x-2 overflow-x-auto pb-1 custom-scrollbar">
                     <!-- Gerado dinamicamente -->
                 </div>
@@ -246,7 +245,7 @@
         </div>
     </div>
 
-    <!-- MODAL: Activity -->
+    <!-- MODAL: Activity com suporte a Maps -->
     <div id="activityModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-0 sm:p-4">
         <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 space-y-4">
             <div class="flex justify-between items-center pb-2 border-b border-slate-100">
@@ -259,8 +258,12 @@
                     <select id="activityDaySelect" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Título</label>
-                    <input type="text" id="activityTitle" placeholder="Ex: Tour pela cidade" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Nome do Local / Atividade</label>
+                    <input type="text" id="activityTitle" placeholder="Ex: British Museum, London" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Endereço ou Localização Google Maps (Opcional)</label>
+                    <input type="text" id="activityLocation" placeholder="Ex: Great Russell St, London WC1B 3DG" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
@@ -468,20 +471,20 @@
             navigator.serviceWorker.register(swUrl).catch(err => console.log('SW registration failed:', err));
         }
 
-        let tripData = JSON.parse(localStorage.getItem('mobileTravelApp_pure_data_v3')) || {
+        let tripData = JSON.parse(localStorage.getItem('mobileTravelApp_pure_data_v4')) || {
             title: "Europa & Foz",
             startDate: "2026-10-02",
             endDate: "2026-10-14",
             activities: {
                 "2026-10-04": [
-                    { id: 1727800000101, title: "National Gallery, London", time: "10:30", category: "Passeio" }
+                    { id: 1727800000101, title: "National Gallery, London", location: "Trafalgar Square, London", time: "10:30", category: "Passeio" }
                 ],
                 "2026-10-06": [
-                    { id: 1727800000102, title: "Sky Garden London", time: "11:00", category: "Passeio" },
-                    { id: 1727800000103, title: "Harry Potter Studio Tour", time: "14:00", category: "Passeio" }
+                    { id: 1727800000102, title: "Sky Garden London", location: "1 Sky Garden Walk, London", time: "11:00", category: "Passeio" },
+                    { id: 1727800000103, title: "Harry Potter Studio Tour", location: "Studio Tour Dr, Leavesden", time: "14:00", category: "Passeio" }
                 ],
                 "2026-10-08": [
-                    { id: 1727800000104, title: "Van Gogh Museum, Amsterdam", time: "10:30", category: "Passeio" }
+                    { id: 1727800000104, title: "Van Gogh Museum, Amsterdam", location: "Museumplein 6, Amsterdam", time: "10:30", category: "Passeio" }
                 ]
             },
             notes: [
@@ -515,7 +518,7 @@
         let dashActiveDay = null;
 
         function saveData() {
-            localStorage.setItem('mobileTravelApp_pure_data_v3', JSON.stringify(tripData));
+            localStorage.setItem('mobileTravelApp_pure_data_v4', JSON.stringify(tripData));
             renderAll();
         }
 
@@ -602,8 +605,6 @@
             const dashCurrentDateEl = document.getElementById('dashCurrentDate');
             const dashTodayStatusEl = document.getElementById('dashTodayStatus');
             if (dashCurrentDateEl) {
-                const now = new Date();
-                const options = { year: 'numeric', month: 'short', day: 'numeric' };
                 dashCurrentDateEl.innerText = `${tripData.startDate ? formatDateShort(tripData.startDate) : ''} ➔ ${tripData.endDate ? formatDateShort(tripData.endDate) : ''}`;
             }
             if (dashTodayStatusEl) {
@@ -694,15 +695,16 @@
                 `;
             });
 
-            // Hospedagens do dia no Dashboard
             let dayHotels = (tripData.hotels || []).filter(h => targetDayStr >= h.checkIn && targetDayStr < h.checkOut);
             let hotelsHtml = '';
             dayHotels.forEach(h => {
+                const mapsQuery = encodeURIComponent(h.name + ' ' + (h.address || ''));
+                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
                 hotelsHtml += `
                     <div class="flex items-center justify-between p-2.5 bg-amber-50/70 rounded-xl text-xs border border-amber-100">
                         <div>
                             <span class="font-bold text-amber-900 block"><i class="fa-solid fa-hotel mr-1"></i> ${h.name}</span>
-                            <span class="text-amber-700">Hospedagem ativa</span>
+                            <a href="${mapsUrl}" target="_blank" class="text-amber-700 hover:underline inline-flex items-center">Ver no Maps <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[9px]"></i></a>
                         </div>
                         <span class="bg-amber-600 text-white px-2 py-1 rounded text-[10px] font-bold">Hotel</span>
                     </div>
@@ -712,11 +714,17 @@
             let actsHtml = '';
             dayActs.sort((a,b) => (a.time || '').localeCompare(b.time || ''));
             dayActs.forEach(act => {
+                const queryStr = encodeURIComponent(act.location ? `${act.title} ${act.location}` : act.title);
+                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${queryStr}`;
+
                 actsHtml += `
                     <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl text-xs">
-                        <div>
+                        <div class="space-y-0.5">
                             <span class="font-bold text-slate-800 block">${act.title}</span>
-                            <span class="text-slate-400">${act.time || 'Livre'} • ${act.category}</span>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-slate-400">${act.time || 'Livre'} • ${act.category}</span>
+                                <a href="${mapsUrl}" target="_blank" class="text-indigo-600 font-semibold hover:underline inline-flex items-center"><i class="fa-solid fa-map-location-dot mr-1"></i> Maps</a>
+                            </div>
                         </div>
                         <span class="bg-indigo-50 text-indigo-600 px-2 py-1 rounded font-medium">${act.category}</span>
                     </div>
@@ -760,16 +768,18 @@
                 selDate.innerText = fullWeekday.charAt(0).toUpperCase() + fullWeekday.slice(1);
             }
 
-            // Render Hotels for this day
             const hotelsContainer = document.getElementById('dayHotelsList');
             if (hotelsContainer) {
                 hotelsContainer.innerHTML = '';
                 const dayHotels = (tripData.hotels || []).filter(h => currentActiveDay >= h.checkIn && currentActiveDay < h.checkOut);
                 dayHotels.forEach(h => {
+                    const mapsQuery = encodeURIComponent(h.name + ' ' + (h.address || ''));
+                    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
                     hotelsContainer.innerHTML += `
                         <div class="p-3 bg-amber-50/70 rounded-xl text-xs space-y-1 border border-amber-100">
-                            <div class="font-bold text-amber-900 flex items-center">
-                                <i class="fa-solid fa-hotel mr-1.5 text-amber-600"></i> Hospedagem: ${h.name}
+                            <div class="font-bold text-amber-900 flex items-center justify-between">
+                                <span><i class="fa-solid fa-hotel mr-1.5 text-amber-600"></i> Hospedagem: ${h.name}</span>
+                                <a href="${mapsUrl}" target="_blank" class="text-amber-700 hover:underline font-semibold inline-flex items-center"><i class="fa-solid fa-map-location-dot mr-1"></i> Maps</a>
                             </div>
                             <div class="text-[11px] text-amber-800">
                                 Check-in: ${h.checkIn} • Check-out: ${h.checkOut}
@@ -779,7 +789,6 @@
                 });
             }
 
-            // Render Tickets for this day (Condensed)
             const ticketsContainer = document.getElementById('dayTicketsList');
             if (ticketsContainer) {
                 ticketsContainer.innerHTML = '';
@@ -835,12 +844,18 @@
 
                 acts.sort((a,b) => (a.time || '').localeCompare(b.time || ''));
                 acts.forEach(act => {
+                    const queryStr = encodeURIComponent(act.location ? `${act.title} ${act.location}` : act.title);
+                    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${queryStr}`;
+
                     actsContainer.innerHTML += `
                         <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl text-xs">
-                            <div class="space-y-0.5">
+                            <div class="space-y-1">
                                 <span class="font-bold text-slate-800 block">${act.title}</span>
-                                <div class="flex items-center space-x-2 text-slate-400">
+                                <div class="flex items-center space-x-3 text-slate-400">
                                     <span>${act.time || 'Horário livre'} • ${act.category}</span>
+                                    <a href="${mapsUrl}" target="_blank" class="text-indigo-600 font-semibold hover:underline inline-flex items-center">
+                                        <i class="fa-solid fa-map-location-dot mr-1"></i> Abrir no Maps
+                                    </a>
                                 </div>
                             </div>
                             <button onclick="deleteActivity('${currentActiveDay}', '${act.id}')" class="text-slate-300 hover:text-rose-500 p-1"><i class="fa-solid fa-trash-can"></i></button>
@@ -1021,15 +1036,17 @@
         function saveActivity() {
             const day = document.getElementById('activityDaySelect').value;
             const title = document.getElementById('activityTitle').value.trim();
+            const location = document.getElementById('activityLocation').value.trim();
             const time = document.getElementById('activityTime').value;
             const category = document.getElementById('activityCategory').value;
 
             if (!title) return;
 
             if (!tripData.activities[day]) tripData.activities[day] = [];
-            tripData.activities[day].push({ id: Date.now(), title, time, category });
+            tripData.activities[day].push({ id: Date.now(), title, location, time, category });
 
             document.getElementById('activityTitle').value = '';
+            document.getElementById('activityLocation').value = '';
             document.getElementById('activityTime').value = '';
             closeActivityModal();
             saveData();
@@ -1108,7 +1125,7 @@
         function openTicketModal() { document.getElementById('ticketModal').classList.remove('hidden'); }
         function closeTicketModal() { document.getElementById('ticketModal').classList.add('hidden'); }
         function saveTicket() {
-            const type = document.getElementById('ticketType').value;
+            const type = document.getElementById('ticketType.value') ? document.getElementById('ticketType').value : document.getElementById('ticketType').value;
             const origin = document.getElementById('ticketOrigin').value.trim().toUpperCase();
             const destination = document.getElementById('ticketDestination').value.trim().toUpperCase();
             const date = document.getElementById('ticketDate').value;
