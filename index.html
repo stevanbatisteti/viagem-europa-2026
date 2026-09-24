@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Planejador de Viagem Mobile</title>
+    
+    <!-- Configurações para PWA no iOS e Android -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Minha Viagem">
+    <meta name="theme-color" content="#4f46e5">
+    
+    <!-- Manifesto dinâmico injetado via blob -->
+    <link id="pwaManifest" rel="manifest" href="">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="h-full bg-slate-900 text-slate-800 flex items-center justify-center overflow-hidden">
+
+    <div class="w-full h-full sm:max-w-md sm:h-[90vh] sm:rounded-[40px] sm:shadow-2xl sm:border-[8px] sm:border-slate-800 bg-slate-50 flex flex-col relative overflow-hidden">
+        
+        <header class="bg-indigo-600 text-white px-6 pt-6 pb-4 shadow-md shrink-0 flex items-center justify-between">
+            <div>
+                <span class="text-[10px] uppercase font-bold tracking-widest text-indigo-200">Destino</span>
+                <h1 id="headerTitle" class="text-lg font-black tracking-tight truncate max-w-[200px]">Minha Viagem</h1>
+            </div>
+            <div class="flex items-center space-x-1.5">
+                <button onclick="openPwaInstallGuide()" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/25 transition-all text-white" title="Como instalar no iPhone">
+                    <i class="fa-solid fa-arrow-up-from-bracket text-sm"></i>
+                </button>
+                <button onclick="openSettingsModal()" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/25 transition-all text-white">
+                    <i class="fa-solid fa-gear text-sm"></i>
+                </button>
+                <button onclick="exportData()" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/25 transition-all text-white">
+                    <i class="fa-solid fa-download text-sm"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto custom-scrollbar p-4 pb-24 space-y-4">
+
+            <!-- DASHBOARD -->
+            <section id="view-dashboard" class="space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-calendar-day"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 block">Status Geral</span>
+                            <h4 id="dashCurrentDate" class="text-sm font-bold text-slate-800">--</h4>
+                        </div>
+                    </div>
+                    <span id="dashTodayStatus" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">--</span>
+                </div>
+
+                <!-- CAROUSEL DE DATAS NO DASHBOARD -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-3">
+                    <div class="flex justify-between items-center pb-2 border-b border-slate-50">
+                        <div class="flex items-center space-x-2">
+                            <button onclick="dashPrevDay()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 flex items-center justify-center transition-all text-xs" title="Dia anterior">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <div>
+                                <h5 id="dashSelectedDayTitle" class="font-bold text-slate-900 text-sm">--</h5>
+                                <p id="dashSelectedDayDate" class="text-[10px] text-slate-400">--</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="dashTodayJump()" class="text-xs text-indigo-600 font-semibold bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1.5 rounded-lg transition-all" title="Ir para hoje">
+                                Hoje
+                            </button>
+                            <button onclick="dashNextDay()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 flex items-center justify-center transition-all text-xs" title="Próximo dia">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TÍTULO ALTERADO DE Compromissos de Hoje para Roteiro -->
+                    <div class="flex justify-between items-center pt-1">
+                        <h5 class="font-bold text-slate-900 text-sm">Roteiro</h5>
+                        <button onclick="switchTab('itinerary')" class="text-xs text-indigo-600 font-semibold">Gerenciar roteiro</button>
+                    </div>
+
+                    <div id="dashUpcomingActivities" class="space-y-2">
+                        <!-- Injetado dinamicamente -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- ROTEIRO -->
+            <section id="view-itinerary" class="hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-900">Roteiro</h3>
+                        <p class="text-xs text-slate-400">Passeios, passagens e hotéis por dia</p>
+                    </div>
+                    <button onclick="openActivityModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow-md shadow-indigo-600/30">
+                        <i class="fa-solid fa-plus text-sm"></i>
+                    </button>
+                </div>
+
+                <!-- Horizontal Scrollable Day Selector (only date on button) -->
+                <div id="daysTabsContainer" class="flex space-x-2 overflow-x-auto pb-1 custom-scrollbar">
+                    <!-- Gerado dinamicamente -->
+                </div>
+
+                <!-- Day Card -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-3">
+                    <div class="flex justify-between items-center pb-2 border-b border-slate-50">
+                        <div>
+                            <h4 id="selectedDayTitle" class="font-bold text-slate-900 text-sm">--</h4>
+                            <p id="selectedDayDate" class="text-xs text-slate-400">--</p>
+                        </div>
+                        <button onclick="openActivityModal()" class="text-xs text-indigo-600 font-semibold bg-indigo-50 px-3 py-1.5 rounded-lg">
+                            <i class="fa-solid fa-plus mr-1"></i> Adicionar
+                        </button>
+                    </div>
+                    <div id="dayHotelsList" class="space-y-2">
+                        <!-- Hospedagens do dia -->
+                    </div>
+                    <div id="dayTicketsList" class="space-y-2">
+                        <!-- Passagens do dia -->
+                    </div>
+                    <div id="dayActivitiesList" class="space-y-2.5">
+                        <!-- Atividades do dia -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- PASSAGENS -->
+            <section id="view-tickets" class="hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-slate-900">Passagens</h3>
+                        <p class="text-xs text-slate-400">Voos e trens agrupados por dia</p>
+                    </div>
+                    <button onclick="openTicketModal()" class="bg-indigo-600 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-plus text-sm"></i>
+                    </button>
+                </div>
+
+                <div id="ticketsContainer" class="space-y-4">
+                    <!-- Passagens agrupadas -->
+                </div>
+            </section>
+
+            <!-- HOSPEDAGEM -->
+            <section id="view-hotels" class="hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-slate-900">Hospedagem</h3>
+                        <p class="text-xs text-slate-400">Hotéis e reservas</p>
+                    </div>
+                    <button onclick="openHotelModal()" class="bg-indigo-600 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-plus text-sm"></i>
+                    </button>
+                </div>
+
+                <div id="hotelsContainer" class="space-y-4">
+                    <!-- Hotéis -->
+                </div>
+            </section>
+
+            <!-- NOTAS -->
+            <section id="view-notes" class="hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-slate-900">Notas & Links</h3>
+                        <p class="text-xs text-slate-400">Guarde informações úteis</p>
+                    </div>
+                    <button onclick="openNoteModal()" class="bg-indigo-600 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-plus text-sm"></i>
+                    </button>
+                </div>
+
+                <div id="notesContainer" class="space-y-3">
+                    <!-- Notas -->
+                </div>
+            </section>
+        </main>
+
+        <nav class="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-slate-200 px-3 py-2 flex justify-around items-center z-30">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex flex-col items-center justify-center py-1 px-1.5 text-indigo-600 transition-all">
+                <i class="fa-solid fa-house text-sm"></i>
+                <span class="text-[9px] font-semibold mt-1">Início</span>
+            </button>
+            <button onclick="switchTab('itinerary')" id="nav-itinerary" class="flex flex-col items-center justify-center py-1 px-1.5 text-slate-400 hover:text-indigo-600 transition-all">
+                <i class="fa-solid fa-calendar-days text-sm"></i>
+                <span class="text-[9px] font-medium mt-1">Roteiro</span>
+            </button>
+            <button onclick="switchTab('tickets')" id="nav-tickets" class="flex flex-col items-center justify-center py-1 px-1.5 text-slate-400 hover:text-indigo-600 transition-all">
+                <i class="fa-solid fa-ticket text-sm"></i>
+                <span class="text-[9px] font-medium mt-1">Passagens</span>
+            </button>
+            <button onclick="switchTab('hotels')" id="nav-hotels" class="flex flex-col items-center justify-center py-1 px-1.5 text-slate-400 hover:text-indigo-600 transition-all">
+                <i class="fa-solid fa-hotel text-sm"></i>
+                <span class="text-[9px] font-medium mt-1">Hospedagem</span>
+            </button>
+            <button onclick="switchTab('notes')" id="nav-notes" class="flex flex-col items-center justify-center py-1 px-1.5 text-slate-400 hover:text-indigo-600 transition-all">
+                <i class="fa-solid fa-note-sticky text-sm"></i>
+                <span class="text-[9px] font-medium mt-1">Notas</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- MODAL: Settings -->
+    <div id="settingsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-0 sm:p-4">
+        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900">Configurar Viagem</h3>
+                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Destino / Título</label>
+                    <input type="text" id="inputTripTitle" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Início</label>
+                        <input type="date" id="inputTripStart" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Término</label>
+                        <input type="date" id="inputTripEnd" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeSettingsModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600">Cancelar</button>
+                <button onclick="saveTripSettings()" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-md">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Activity -->
+    <div id="activityModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-0 sm:p-4">
+        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900">Nova Atividade</h3>
+                <button onclick="closeActivityModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Dia</label>
+                    <select id="activityDaySelect" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Título</label>
+                    <input type="text" id="activityTitle" placeholder="Ex: Tour pela cidade" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Horário</label>
+                        <input type="time" id="activityTime" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Categoria</label>
+                        <select id="activityCategory" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="Passeio">Passeio</option>
+                            <option value="Alimentação">Alimentação</option>
+                            <option value="Transporte">Transporte</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeActivityModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600">Cancelar</button>
+                <button onclick="saveActivity()" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-md">Adicionar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Note -->
+    <div id="noteModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-0 sm:p-4">
+        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900">Nova Nota</h3>
+                <button onclick="closeNoteModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Título</label>
+                    <input type="text" id="noteTitle" placeholder="Ex: Informações úteis" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Conteúdo</label>
+                    <textarea id="noteContent" rows="3" placeholder="Detalhes ou links..." class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeNoteModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600">Cancelar</button>
+                <button onclick="saveNote()" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-md">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Ticket -->
+    <div id="ticketModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-0 sm:p-4">
+        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900">Adicionar Passagem</h3>
+                <button onclick="closeTicketModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tipo de Transporte</label>
+                    <select id="ticketType" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="Avião">Avião (Voo)</option>
+                        <option value="Trem">Trem (Ferroviário)</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Origem</label>
+                        <input type="text" id="ticketOrigin" placeholder="Ex: GRU" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Destino</label>
+                        <input type="text" id="ticketDestination" placeholder="Ex: LIS" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Data</label>
+                        <input type="date" id="ticketDate" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Horário</label>
+                        <input type="time" id="ticketTime" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Código / Voo</label>
+                        <input type="text" id="ticketCode" placeholder="Ex: LA3402" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Localizador / PNR</label>
+                        <input type="text" id="ticketLocator" placeholder="Ex: ABC123" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Passageiros e Assentos</label>
+                    <input type="text" id="ticketPassengers" placeholder="Ex: Stevan (4A), Fernanda (4B)" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeTicketModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600">Cancelar</button>
+                <button onclick="saveTicket()" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-md">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Hotel -->
+    <div id="hotelModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-0 sm:p-4">
+        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900">Adicionar Hospedagem</h3>
+                <button onclick="closeHotelModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Nome do Hotel / Local</label>
+                    <input type="text" id="hotelName" placeholder="Ex: Hotel ibis London" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Check-in</label>
+                        <input type="date" id="hotelCheckIn" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Check-out</label>
+                        <input type="date" id="hotelCheckOut" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Endereço / Cidade</label>
+                    <input type="text" id="hotelAddress" placeholder="Ex: London, UK" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Confirmação / Reserva</label>
+                    <input type="text" id="hotelConfirmation" placeholder="Ex: 987654321" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeHotelModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600">Cancelar</button>
+                <button onclick="saveHotel()" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-md">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PWA Install Guide for iOS -->
+    <div id="pwaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-0 sm:p-4">
+        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900 text-sm flex items-center">
+                    <i class="fa-solid fa-mobile-screen-button text-indigo-600 mr-2"></i> Instalar no iPhone
+                </h3>
+                <button onclick="closePwaInstallGuide()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-xs text-slate-600 leading-relaxed">
+                <p>Para usar este planejador como um aplicativo nativo na tela inicial do seu iPhone:</p>
+                <ol class="list-decimal pl-4 space-y-2 font-medium text-slate-700">
+                    <li>Abra esta página no navegador <strong class="text-indigo-600">Safari</strong> do seu iPhone.</li>
+                    <li>Toque no botão de Compartilhar <i class="fa-solid fa-arrow-up-from-bracket text-indigo-600 mx-0.5"></i> na barra inferior do Safari.</li>
+                    <li>Role as opções para baixo e selecione <strong class="text-slate-900">"Adicionar à Tela de Início"</strong>.</li>
+                    <li>Confirme em <strong class="text-slate-900">"Adicionar"</strong> no canto superior direito. Pronto!</li>
+                </ol>
+            </div>
+            <div class="pt-2">
+                <button onclick="closePwaInstallGuide()" class="w-full py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-md">Entendi</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuração automática do Web App Manifest para PWA
+        const manifestData = {
+            "name": "Planejador de Viagem",
+            "short_name": "Viagem",
+            "start_url": window.location.href,
+            "display": "standalone",
+            "background_color": "#0f172a",
+            "theme_color": "#4f46e5",
+            "icons": [
+                {
+                    "src": "https://placehold.co/192x192/4f46e5/ffffff?text=✈️",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                },
+                {
+                    "src": "https://placehold.co/512x512/4f46e5/ffffff?text=✈️",
+                    "sizes": "512x512",
+                    "type": "image/png"
+                }
+            ]
+        };
+        const stringManifest = JSON.stringify(manifestData);
+        const blob = new Blob([stringManifest], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(blob);
+        document.getElementById('pwaManifest').setAttribute('href', manifestURL);
+
+        // Registro de Service Worker para funcionamento offline
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', (e) => { self.skipWaiting(); });
+                self.addEventListener('activate', (e) => { e.waitUntil(clients.claim()); });
+                self.addEventListener('fetch', (e) => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });
+            `;
+            const swBlob = new Blob([swCode], {type: 'text/javascript'});
+            const swUrl = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swUrl).catch(err => console.log('SW registration failed:', err));
+        }
+
+        let tripData = JSON.parse(localStorage.getItem('mobileTravelApp_pure_data_v3')) || {
+            title: "Europa & Foz",
+            startDate: "2026-10-02",
+            endDate: "2026-10-14",
+            activities: {
+                "2026-10-04": [
+                    { id: 1727800000101, title: "National Gallery, London", time: "10:30", category: "Passeio" }
+                ],
+                "2026-10-06": [
+                    { id: 1727800000102, title: "Sky Garden London", time: "11:00", category: "Passeio" },
+                    { id: 1727800000103, title: "Harry Potter Studio Tour", time: "14:00", category: "Passeio" }
+                ],
+                "2026-10-08": [
+                    { id: 1727800000104, title: "Van Gogh Museum, Amsterdam", time: "10:30", category: "Passeio" }
+                ]
+            },
+            notes: [
+                { id: 1, title: "Conexões importantes", content: "Atenção aos tempos de conexão em Viracopos e Madrid." }
+            ],
+            hotels: [
+                { id: 1, name: "Merit Kensington Hotel", checkIn: "2026-10-03", checkOut: "2026-10-07", address: "12, 16-18 & 24 Penywern Road, Earls Court, London, SW5 9SU Reino Unido", confirmation: "72077647098506" },
+                { id: 2, name: "Hampton by Hilton Amsterdam / Arena Boulevard", checkIn: "2026-10-07", checkOut: "2026-10-10", address: "Hoekenrode 1, Amsterdam, North Holland, 1102 BR Países Baixos", confirmation: "72078434462916" },
+                { id: 3, name: "Be Mate Trafalgar", checkIn: "2026-10-10", checkOut: "2026-10-13", address: "C. de Trafalgar 35, Madrid, 28010 Espanha", confirmation: "72078782114971" }
+            ],
+            tickets: [
+                { id: 1727800000001, type: "Avião", origin: "IGU", destination: "VCP", date: "2026-10-02", time: "15:20", code: "AZUL 4726", seat: "4A, 4B", passengers: "SPB; FSB", locator: "GLTDWG" },
+                { id: 1727800000002, type: "Avião", origin: "IGU", destination: "VCP", date: "2026-10-02", time: "15:20", code: "AZUL 4726", seat: "4C", passengers: "MCB", locator: "NL527J" },
+                { id: 1727800000003, type: "Avião", origin: "VCP", destination: "MAD", date: "2026-10-02", time: "20:05", code: "AZUL 8754", seat: "3A, 3F", passengers: "SPB; FSB", locator: "XRDY6E" },
+                { id: 1727800000004, type: "Avião", origin: "VCP", destination: "MAD", date: "2026-10-02", time: "20:05", code: "AZUL 8754", seat: "3C", passengers: "MCB", locator: "PQFLMK" },
+                { id: 1727800000005, type: "Avião", origin: "MAD", destination: "LHR", date: "2026-10-03", time: "15:45", code: "IBERIA 0721", seat: "9A, 9B, 9C", passengers: "SPB; FSB; MCB", locator: "N4LZB" },
+                { id: 1727800000006, type: "Avião", origin: "IGU", destination: "GRU", date: "2026-10-03", time: "19:40", code: "LATAM 3205", seat: "11C", passengers: "GSB", locator: "AVLKHN" },
+                { id: 1727800000007, type: "Avião", origin: "GRU", destination: "LHR", date: "2026-10-03", time: "23:50", code: "LATAM 8084", seat: "14H", passengers: "GSB", locator: "AVLKHN" },
+                { id: 1727800000008, type: "Trem", origin: "LONDRES ST. PANCRAS", destination: "AMST", date: "2026-10-07", time: "06:16", code: "EUROSTAR 9106", seat: "Coach 11 - 46, 45, 41, 42", passengers: "SPB; FSB; GSB; MCB", locator: "RT6JJ7" },
+                { id: 1727800000009, type: "Trem", origin: "AMSTERDAM ZUID", destination: "BRUX", date: "2026-10-10", time: "07:03", code: "EUROCITY DIRECT 9516", seat: "-", passengers: "SPB; FSB; GSB; MCB", locator: "RGHRDVF" },
+                { id: 1727800000010, type: "Avião", origin: "BRU", destination: "MAD", date: "2026-10-10", time: "18:55", code: "AIR EUR 1174", seat: "17A, 17B, 17C, 17D", passengers: "SPB; FSB; GSB; MCB", locator: "UX/968P7X" },
+                { id: 1727800000011, type: "Avião", origin: "MAD", destination: "VCP", date: "2026-10-13", time: "13:50", code: "AZUL 8755", seat: "9D", passengers: "GSB", locator: "AG51PY" },
+                { id: 1727800000012, type: "Avião", origin: "MAD", destination: "VCP", date: "2026-10-13", time: "13:50", code: "AZUL 8755", seat: "7C, 7D", passengers: "SPB; FSB", locator: "XRDY6E" },
+                { id: 1727800000013, type: "Avião", origin: "MAD", destination: "VCP", date: "2026-10-13", time: "13:50", code: "AZUL 8755", seat: "9C", passengers: "MCB", locator: "PQFLMK" },
+                { id: 1727800000014, type: "Avião", origin: "CGH", destination: "IGU", date: "2026-10-14", time: "12:05", code: "AZUL 6002", seat: "4C", passengers: "MCB", locator: "NL527J" },
+                { id: 1727800000015, type: "Avião", origin: "CGH", destination: "IGU", date: "2026-10-14", time: "12:05", code: "AZUL 6002", seat: "4A, 4B", passengers: "SPB; FSB", locator: "GLTDWG" }
+            ]
+        };
+
+        let currentActiveDay = null;
+        let dashActiveDay = null;
+
+        function saveData() {
+            localStorage.setItem('mobileTravelApp_pure_data_v3', JSON.stringify(tripData));
+            renderAll();
+        }
+
+        function switchTab(tabId) {
+            ['dashboard', 'itinerary', 'tickets', 'hotels', 'notes'].forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                const btn = document.getElementById(`nav-${v}`);
+                if (el) {
+                    if (v === tabId) {
+                        el.classList.remove('hidden');
+                    } else {
+                        el.classList.add('hidden');
+                    }
+                }
+                if (btn) {
+                    if (v === tabId) {
+                        btn.className = "flex flex-col items-center justify-center py-1 px-1.5 text-indigo-600 transition-all";
+                    } else {
+                        btn.className = "flex flex-col items-center justify-center py-1 px-1.5 text-slate-400 hover:text-indigo-600 transition-all";
+                    }
+                }
+            });
+        }
+
+        function getTripDays() {
+            const start = new Date(tripData.startDate + 'T00:00:00');
+            const end = new Date(tripData.endDate + 'T00:00:00');
+            const days = [];
+            let current = new Date(start);
+            while (current <= end) {
+                days.push(current.toISOString().split('T')[0]);
+                current.setDate(current.getDate() + 1);
+            }
+            return days;
+        }
+
+        function selectDay(dayStr) {
+            currentActiveDay = dayStr;
+            renderItineraryDays();
+        }
+
+        function dashPrevDay() {
+            const days = getTripDays();
+            if (days.length === 0) return;
+            if (!dashActiveDay || !days.includes(dashActiveDay)) dashActiveDay = days[0];
+            const idx = days.indexOf(dashActiveDay);
+            if (idx > 0) {
+                dashActiveDay = days[idx - 1];
+                renderDashboardUpcoming();
+            }
+        }
+
+        function dashNextDay() {
+            const days = getTripDays();
+            if (days.length === 0) return;
+            if (!dashActiveDay || !days.includes(dashActiveDay)) dashActiveDay = days[0];
+            const idx = days.indexOf(dashActiveDay);
+            if (idx < days.length - 1) {
+                dashActiveDay = days[idx + 1];
+                renderDashboardUpcoming();
+            }
+        }
+
+        function dashTodayJump() {
+            const todayStr = new Date().toISOString().split('T')[0];
+            const days = getTripDays();
+            if (days.includes(todayStr)) {
+                dashActiveDay = todayStr;
+            } else if (days.length > 0) {
+                dashActiveDay = days[0];
+            }
+            renderDashboardUpcoming();
+        }
+
+        function renderAll() {
+            const headerTitle = document.getElementById('headerTitle');
+            if (headerTitle) headerTitle.innerText = tripData.title;
+            
+            const today = new Date().toISOString().split('T')[0];
+            if (!dashActiveDay) {
+                dashActiveDay = getTripDays().includes(today) ? today : (getTripDays()[0] || today);
+            }
+
+            const dashCurrentDateEl = document.getElementById('dashCurrentDate');
+            const dashTodayStatusEl = document.getElementById('dashTodayStatus');
+            if (dashCurrentDateEl) {
+                const now = new Date();
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                dashCurrentDateEl.innerText = `${tripData.startDate ? formatDateShort(tripData.startDate) : ''} ➔ ${tripData.endDate ? formatDateShort(tripData.endDate) : ''}`;
+            }
+            if (dashTodayStatusEl) {
+                if (today >= tripData.startDate && today <= tripData.endDate) {
+                    dashTodayStatusEl.innerText = "Viagem em curso";
+                    dashTodayStatusEl.className = "text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600";
+                } else if (today < tripData.startDate) {
+                    dashTodayStatusEl.innerText = "Pré-viagem";
+                    dashTodayStatusEl.className = "text-xs font-semibold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-600";
+                } else {
+                    dashTodayStatusEl.innerText = "Concluída";
+                    dashTodayStatusEl.className = "text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600";
+                }
+            }
+
+            renderDashboardUpcoming();
+            renderItineraryDays();
+            renderNotes();
+            renderTickets();
+            renderHotels();
+        }
+
+        function formatDateShort(dateStr) {
+            if (!dateStr) return '';
+            const [y, m, d] = dateStr.split('-');
+            return `${d}/${m}`;
+        }
+
+        function renderDashboardUpcoming() {
+            const container = document.getElementById('dashUpcomingActivities');
+            const selTitle = document.getElementById('dashSelectedDayTitle');
+            const selDate = document.getElementById('dashSelectedDayDate');
+            
+            const days = getTripDays();
+            if (days.length > 0 && (!dashActiveDay || !days.includes(dashActiveDay))) {
+                const todayStr = new Date().toISOString().split('T')[0];
+                dashActiveDay = days.includes(todayStr) ? todayStr : days[0];
+            }
+
+            if (selTitle && selDate && dashActiveDay) {
+                selTitle.innerText = formatDateShort(dashActiveDay);
+                const [y, m, d] = dashActiveDay.split('-');
+                const dateObj = new Date(y, m - 1, d);
+                const fullWeekday = dateObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+                selDate.innerText = fullWeekday.charAt(0).toUpperCase() + fullWeekday.slice(1);
+            }
+
+            if (!container) return;
+            container.innerHTML = '';
+            
+            const targetDayStr = dashActiveDay || new Date().toISOString().split('T')[0];
+            let dayActs = (tripData.activities && tripData.activities[targetDayStr]) ? [...tripData.activities[targetDayStr]] : [];
+
+            let allTicketsToday = (tripData.tickets || []).filter(t => t.date === targetDayStr);
+            let ticketsHtml = '';
+            
+            const nameMap = { 'SPB': 'Stevan', 'FSB': 'Fernanda', 'MCB': 'Maria Clara', 'GSB': 'Guilherme' };
+            const condensedMap = {};
+            allTicketsToday.forEach(ticket => {
+                const key = `${ticket.type}_${ticket.origin}_${ticket.destination}_${ticket.date}_${ticket.time}_${ticket.code}`;
+                if (!condensedMap[key]) {
+                    condensedMap[key] = { ...ticket, passengersList: [], seatsList: [], locatorsList: new Set() };
+                }
+                if (ticket.passengers) {
+                    ticket.passengers.split(';').forEach(p => {
+                        const trimmed = p.trim();
+                        if (trimmed) {
+                            const fullName = nameMap[trimmed] || trimmed;
+                            if (!condensedMap[key].passengersList.includes(fullName)) condensedMap[key].passengersList.push(fullName);
+                        }
+                    });
+                }
+                if (ticket.seat && ticket.seat !== '-') condensedMap[key].seatsList.push(ticket.seat);
+                if (ticket.locator) condensedMap[key].locatorsList.add(ticket.locator);
+            });
+
+            Object.values(condensedMap).forEach(t => {
+                const icon = t.type === 'Trem' ? 'fa-train' : 'fa-plane';
+                const paxStr = t.passengersList.join(', ');
+                ticketsHtml += `
+                    <div class="flex items-center justify-between p-2.5 bg-indigo-50/70 rounded-xl text-xs border border-indigo-100">
+                        <div>
+                            <span class="font-bold text-indigo-900 block"><i class="fa-solid ${icon} mr-1"></i> ${t.code} (${t.origin} ➔ ${t.destination})</span>
+                            <span class="text-indigo-600">${t.time || ''} • Pax: ${paxStr || 'Todos'}</span>
+                        </div>
+                        <span class="bg-indigo-600 text-white px-2 py-1 rounded text-[10px] font-bold">Transporte</span>
+                    </div>
+                `;
+            });
+
+            // Hospedagens do dia no Dashboard
+            let dayHotels = (tripData.hotels || []).filter(h => targetDayStr >= h.checkIn && targetDayStr < h.checkOut);
+            let hotelsHtml = '';
+            dayHotels.forEach(h => {
+                hotelsHtml += `
+                    <div class="flex items-center justify-between p-2.5 bg-amber-50/70 rounded-xl text-xs border border-amber-100">
+                        <div>
+                            <span class="font-bold text-amber-900 block"><i class="fa-solid fa-hotel mr-1"></i> ${h.name}</span>
+                            <span class="text-amber-700">Hospedagem ativa</span>
+                        </div>
+                        <span class="bg-amber-600 text-white px-2 py-1 rounded text-[10px] font-bold">Hotel</span>
+                    </div>
+                `;
+            });
+
+            let actsHtml = '';
+            dayActs.sort((a,b) => (a.time || '').localeCompare(b.time || ''));
+            dayActs.forEach(act => {
+                actsHtml += `
+                    <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl text-xs">
+                        <div>
+                            <span class="font-bold text-slate-800 block">${act.title}</span>
+                            <span class="text-slate-400">${act.time || 'Livre'} • ${act.category}</span>
+                        </div>
+                        <span class="bg-indigo-50 text-indigo-600 px-2 py-1 rounded font-medium">${act.category}</span>
+                    </div>
+                `;
+            });
+
+            if (!ticketsHtml && !hotelsHtml && !actsHtml) {
+                container.innerHTML = `<p class="text-xs text-slate-400 italic py-2 text-center">Nenhum compromisso agendado para este dia.</p>`;
+            } else {
+                container.innerHTML = hotelsHtml + ticketsHtml + actsHtml;
+            }
+        }
+
+        function renderItineraryDays() {
+            const days = getTripDays();
+            const container = document.getElementById('daysTabsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (days.length === 0) return;
+            if (!currentActiveDay || !days.includes(currentActiveDay)) currentActiveDay = days[0];
+
+            days.forEach((dayStr) => {
+                const active = dayStr === currentActiveDay;
+                container.innerHTML += `
+                    <button onclick="selectDay('${dayStr}')" class="px-3.5 py-2 rounded-xl text-xs font-semibold shrink-0 transition-all flex flex-col items-center justify-center min-w-[65px] ${active ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-100'}">
+                        <span>${formatDateShort(dayStr)}</span>
+                    </button>
+                `;
+            });
+
+            const selTitle = document.getElementById('selectedDayTitle');
+            const selDate = document.getElementById('selectedDayDate');
+            if (selTitle) {
+                selTitle.innerText = formatDateShort(currentActiveDay);
+            }
+            if (selDate) {
+                const [y, m, d] = currentActiveDay.split('-');
+                const dateObj = new Date(y, m - 1, d);
+                const fullWeekday = dateObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+                selDate.innerText = fullWeekday.charAt(0).toUpperCase() + fullWeekday.slice(1);
+            }
+
+            // Render Hotels for this day
+            const hotelsContainer = document.getElementById('dayHotelsList');
+            if (hotelsContainer) {
+                hotelsContainer.innerHTML = '';
+                const dayHotels = (tripData.hotels || []).filter(h => currentActiveDay >= h.checkIn && currentActiveDay < h.checkOut);
+                dayHotels.forEach(h => {
+                    hotelsContainer.innerHTML += `
+                        <div class="p-3 bg-amber-50/70 rounded-xl text-xs space-y-1 border border-amber-100">
+                            <div class="font-bold text-amber-900 flex items-center">
+                                <i class="fa-solid fa-hotel mr-1.5 text-amber-600"></i> Hospedagem: ${h.name}
+                            </div>
+                            <div class="text-[11px] text-amber-800">
+                                Check-in: ${h.checkIn} • Check-out: ${h.checkOut}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            // Render Tickets for this day (Condensed)
+            const ticketsContainer = document.getElementById('dayTicketsList');
+            if (ticketsContainer) {
+                ticketsContainer.innerHTML = '';
+                const dayTickets = (tripData.tickets || []).filter(t => t.date === currentActiveDay);
+                
+                if (dayTickets.length > 0) {
+                    const nameMap = { 'SPB': 'Stevan', 'FSB': 'Fernanda', 'MCB': 'Maria Clara', 'GSB': 'Guilherme' };
+                    const condensedMap = {};
+                    dayTickets.forEach(ticket => {
+                        const key = `${ticket.type}_${ticket.origin}_${ticket.destination}_${ticket.date}_${ticket.time}_${ticket.code}`;
+                        if (!condensedMap[key]) {
+                            condensedMap[key] = { ...ticket, passengersList: [], seatsList: [], locatorsList: new Set() };
+                        }
+                        if (ticket.passengers) {
+                            ticket.passengers.split(';').forEach(p => {
+                                const trimmed = p.trim();
+                                if (trimmed) {
+                                    const fullName = nameMap[trimmed] || trimmed;
+                                    if (!condensedMap[key].passengersList.includes(fullName)) condensedMap[key].passengersList.push(fullName);
+                                }
+                            });
+                        }
+                        if (ticket.seat && ticket.seat !== '-') condensedMap[key].seatsList.push(ticket.seat);
+                        if (ticket.locator) condensedMap[key].locatorsList.add(ticket.locator);
+                    });
+
+                    Object.values(condensedMap).forEach(t => {
+                        const icon = t.type === 'Trem' ? 'fa-train' : 'fa-plane';
+                        const paxStr = t.passengersList.join(', ');
+                        const seatsStr = t.seatsList.join(' | ');
+                        const locatorsStr = Array.from(t.locatorsList).join(', ');
+
+                        ticketsContainer.innerHTML += `
+                            <div class="p-3 bg-indigo-50/70 rounded-xl text-xs space-y-1.5 border border-indigo-100">
+                                <div class="flex justify-between items-center font-bold text-indigo-900">
+                                    <span><i class="fa-solid ${icon} mr-1"></i> ${t.code} (${t.origin} ➔ ${t.destination})</span>
+                                    <span class="text-xs text-indigo-600 font-mono">${t.time || ''}</span>
+                                </div>
+                                <div class="text-[11px] text-slate-600 space-y-0.5">
+                                    <div><span class="font-semibold text-slate-700">Pax:</span> ${paxStr || 'Não especificado'}</div>
+                                    <div><span class="font-semibold text-slate-700">Assentos:</span> ${seatsStr || 'N/A'} • <span class="font-semibold text-slate-700">PNR:</span> <span class="font-mono text-indigo-700">${locatorsStr}</span></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            }
+
+            const actsContainer = document.getElementById('dayActivitiesList');
+            if (actsContainer) {
+                actsContainer.innerHTML = '';
+                const acts = tripData.activities[currentActiveDay] || [];
+
+                acts.sort((a,b) => (a.time || '').localeCompare(b.time || ''));
+                acts.forEach(act => {
+                    actsContainer.innerHTML += `
+                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl text-xs">
+                            <div class="space-y-0.5">
+                                <span class="font-bold text-slate-800 block">${act.title}</span>
+                                <div class="flex items-center space-x-2 text-slate-400">
+                                    <span>${act.time || 'Horário livre'} • ${act.category}</span>
+                                </div>
+                            </div>
+                            <button onclick="deleteActivity('${currentActiveDay}', '${act.id}')" class="text-slate-300 hover:text-rose-500 p-1"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    `;
+                });
+
+                if (acts.length === 0 && (tripData.tickets || []).filter(t => t.date === currentActiveDay).length === 0 && (tripData.hotels || []).filter(h => currentActiveDay >= h.checkIn && currentActiveDay < h.checkOut).length === 0) {
+                    actsContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-2 italic">Nenhum evento neste dia.</p>`;
+                }
+            }
+        }
+
+        function renderNotes() {
+            const container = document.getElementById('notesContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            if (!tripData.notes || tripData.notes.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4 italic">Nenhuma nota cadastrada.</p>`;
+                return;
+            }
+
+            tripData.notes.forEach(note => {
+                container.innerHTML += `
+                    <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-1 relative">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-slate-900 text-xs">${note.title}</h4>
+                            <button onclick="deleteNote(${note.id})" class="text-slate-300 hover:text-rose-500"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                        </div>
+                        <p class="text-xs text-slate-600 whitespace-pre-wrap">${note.content}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function renderHotels() {
+            const container = document.getElementById('hotelsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            const hotels = tripData.hotels || [];
+            if (hotels.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4 italic">Nenhuma hospedagem cadastrada.</p>`;
+                return;
+            }
+
+            hotels.forEach(h => {
+                const mapsQuery = encodeURIComponent(h.name + ' ' + (h.address || ''));
+                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
+
+                container.innerHTML += `
+                    <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-slate-900 text-sm flex items-center">
+                                <i class="fa-solid fa-hotel text-indigo-600 mr-2"></i> ${h.name}
+                            </h4>
+                            <button onclick="deleteHotel(${h.id})" class="text-slate-300 hover:text-rose-500"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                        </div>
+                        <div class="text-xs text-slate-600 space-y-1">
+                            <div><span class="font-semibold text-slate-700">Check-in:</span> ${h.checkIn || 'N/A'} • <span class="font-semibold text-slate-700">Check-out:</span> ${h.checkOut || 'N/A'}</div>
+                            <div>
+                                <span class="font-semibold text-slate-700">Local:</span> 
+                                <a href="${mapsUrl}" target="_blank" class="text-indigo-600 hover:underline inline-flex items-center">
+                                    ${h.address || 'N/A'} <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
+                                </a>
+                            </div>
+                            <div><span class="font-semibold text-slate-700">Confirmação:</span> <span class="font-mono text-indigo-600">${h.confirmation || 'N/A'}</span></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderTickets() {
+            const container = document.getElementById('ticketsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            const tickets = tripData.tickets || [];
+            if (tickets.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4 italic">Nenhuma passagem cadastrada.</p>`;
+                return;
+            }
+
+            const byDate = {};
+            tickets.forEach(t => {
+                if (!byDate[t.date]) byDate[t.date] = [];
+                byDate[t.date].push(t);
+            });
+
+            const sortedDates = Object.keys(byDate).sort();
+
+            sortedDates.forEach(dateStr => {
+                const dayTickets = byDate[dateStr];
+                const [y, m, d] = dateStr.split('-');
+                const dateObj = new Date(y, m - 1, d);
+                const weekday = dateObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+                const formattedDateHeading = `${d}/${m}/${y} - ${weekday.charAt(0).toUpperCase() + weekday.slice(1)}`;
+
+                let dayCardsHtml = '';
+
+                const nameMap = { 'SPB': 'Stevan', 'FSB': 'Fernanda', 'MCB': 'Maria Clara', 'GSB': 'Guilherme' };
+                const condensedMap = {};
+                dayTickets.forEach(ticket => {
+                    const key = `${ticket.type}_${ticket.origin}_${ticket.destination}_${ticket.date}_${ticket.time}_${ticket.code}`;
+                    if (!condensedMap[key]) {
+                        condensedMap[key] = { ...ticket, passengersList: [], seatsList: [], locatorsList: new Set() };
+                    }
+                    if (ticket.passengers) {
+                        ticket.passengers.split(';').forEach(p => {
+                            const trimmed = p.trim();
+                            if (trimmed) {
+                                const fullName = nameMap[trimmed] || trimmed;
+                                if (!condensedMap[key].passengersList.includes(fullName)) condensedMap[key].passengersList.push(fullName);
+                            }
+                        });
+                    }
+                    if (ticket.seat && ticket.seat !== '-') condensedMap[key].seatsList.push(ticket.seat);
+                    if (ticket.locator) condensedMap[key].locatorsList.add(ticket.locator);
+                });
+
+                Object.values(condensedMap).forEach(t => {
+                    const icon = t.type === 'Trem' ? 'fa-train' : 'fa-plane';
+                    const paxStr = t.passengersList.join(', ');
+                    const seatsStr = t.seatsList.join(' | ');
+                    const locatorsStr = Array.from(t.locatorsList).join(', ');
+
+                    dayCardsHtml += `
+                        <div class="p-3.5 bg-slate-50 rounded-xl text-xs space-y-2 border border-slate-100">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-indigo-900 flex items-center">
+                                    <i class="fa-solid ${icon} mr-1.5 text-indigo-600"></i> ${t.type} - ${t.code}
+                                </span>
+                                <button onclick="deleteTicket(${t.id})" class="text-slate-300 hover:text-rose-500"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                            <div class="flex justify-between items-center text-slate-700 font-semibold">
+                                <span>${t.origin}</span>
+                                <i class="fa-solid fa-arrow-right text-slate-300 text-[10px]"></i>
+                                <span>${t.destination}</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-200/60 text-[11px] text-slate-600">
+                                <div><span class="font-semibold">Horário:</span> ${t.time || 'N/A'}</div>
+                                <div><span class="font-semibold">Localizador:</span> <span class="font-mono text-indigo-600">${locatorsStr || 'N/A'}</span></div>
+                                <div class="col-span-2"><span class="font-semibold">Passageiros:</span> ${paxStr || 'Não especificado'}</div>
+                                <div class="col-span-2"><span class="font-semibold">Assentos:</span> ${seatsStr || 'N/A'}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML += `
+                    <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-3">
+                        <div class="pb-2 border-b border-slate-100">
+                            <h4 class="font-bold text-slate-900 text-sm">${formattedDateHeading}</h4>
+                        </div>
+                        <div class="space-y-2.5">
+                            ${dayCardsHtml}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openActivityModal() {
+            const select = document.getElementById('activityDaySelect');
+            if (select) {
+                select.innerHTML = '';
+                getTripDays().forEach(day => {
+                    select.innerHTML += `<option value="${day}">${formatDateShort(day)} (${day})</option>`;
+                });
+                if (currentActiveDay) select.value = currentActiveDay;
+            }
+            document.getElementById('activityModal').classList.remove('hidden');
+        }
+        function closeActivityModal() { document.getElementById('activityModal').classList.add('hidden'); }
+
+        function saveActivity() {
+            const day = document.getElementById('activityDaySelect').value;
+            const title = document.getElementById('activityTitle').value.trim();
+            const time = document.getElementById('activityTime').value;
+            const category = document.getElementById('activityCategory').value;
+
+            if (!title) return;
+
+            if (!tripData.activities[day]) tripData.activities[day] = [];
+            tripData.activities[day].push({ id: Date.now(), title, time, category });
+
+            document.getElementById('activityTitle').value = '';
+            document.getElementById('activityTime').value = '';
+            closeActivityModal();
+            saveData();
+        }
+
+        function deleteActivity(day, actId) {
+            if (tripData.activities[day]) {
+                tripData.activities[day] = tripData.activities[day].filter(a => a.id != actId);
+                saveData();
+            }
+        }
+
+        function openSettingsModal() {
+            document.getElementById('inputTripTitle').value = tripData.title;
+            document.getElementById('inputTripStart').value = tripData.startDate;
+            document.getElementById('inputTripEnd').value = tripData.endDate;
+            document.getElementById('settingsModal').classList.remove('hidden');
+        }
+        function closeSettingsModal() { document.getElementById('settingsModal').classList.add('hidden'); }
+        function saveTripSettings() {
+            tripData.title = document.getElementById('inputTripTitle').value.trim() || tripData.title;
+            tripData.startDate = document.getElementById('inputTripStart').value || tripData.startDate;
+            tripData.endDate = document.getElementById('inputTripEnd').value || tripData.endDate;
+            closeSettingsModal();
+            saveData();
+        }
+
+        function openNoteModal() { document.getElementById('noteModal').classList.remove('hidden'); }
+        function closeNoteModal() { document.getElementById('noteModal').classList.add('hidden'); }
+        function saveNote() {
+            const title = document.getElementById('noteTitle').value.trim();
+            const content = document.getElementById('noteContent').value.trim();
+            if (!title) return;
+
+            if (!tripData.notes) tripData.notes = [];
+            tripData.notes.push({ id: Date.now(), title, content });
+
+            document.getElementById('noteTitle').value = '';
+            document.getElementById('noteContent').value = '';
+            closeNoteModal();
+            saveData();
+        }
+        function deleteNote(id) {
+            tripData.notes = (tripData.notes || []).filter(n => n.id !== id);
+            saveData();
+        }
+
+        function openHotelModal() { document.getElementById('hotelModal').classList.remove('hidden'); }
+        function closeHotelModal() { document.getElementById('hotelModal').classList.add('hidden'); }
+        function saveHotel() {
+            const name = document.getElementById('hotelName').value.trim();
+            const checkIn = document.getElementById('hotelCheckIn').value;
+            const checkOut = document.getElementById('hotelCheckOut').value;
+            const address = document.getElementById('hotelAddress').value.trim();
+            const confirmation = document.getElementById('hotelConfirmation').value.trim();
+
+            if (!name) return;
+
+            if (!tripData.hotels) tripData.hotels = [];
+            tripData.hotels.push({ id: Date.now(), name, checkIn, checkOut, address, confirmation });
+
+            document.getElementById('hotelName').value = '';
+            document.getElementById('hotelCheckIn').value = '';
+            document.getElementById('hotelCheckOut').value = '';
+            document.getElementById('hotelAddress').value = '';
+            document.getElementById('hotelConfirmation').value = '';
+
+            closeHotelModal();
+            saveData();
+        }
+        function deleteHotel(id) {
+            tripData.hotels = (tripData.hotels || []).filter(h => h.id !== id);
+            saveData();
+        }
+
+        function openTicketModal() { document.getElementById('ticketModal').classList.remove('hidden'); }
+        function closeTicketModal() { document.getElementById('ticketModal').classList.add('hidden'); }
+        function saveTicket() {
+            const type = document.getElementById('ticketType').value;
+            const origin = document.getElementById('ticketOrigin').value.trim().toUpperCase();
+            const destination = document.getElementById('ticketDestination').value.trim().toUpperCase();
+            const date = document.getElementById('ticketDate').value;
+            const time = document.getElementById('ticketTime').value;
+            const code = document.getElementById('ticketCode').value.trim().toUpperCase();
+            const locator = document.getElementById('ticketLocator').value.trim().toUpperCase();
+            const passengers = document.getElementById('ticketPassengers').value.trim();
+
+            if (!origin || !destination || !date) return;
+
+            if (!tripData.tickets) tripData.tickets = [];
+            tripData.tickets.push({
+                id: Date.now(),
+                type,
+                origin,
+                destination,
+                date,
+                time,
+                code: code || 'GERAL',
+                seat: '-',
+                passengers: passengers || 'Stevan, Fernanda',
+                locator: locator || 'N/A'
+            });
+
+            document.getElementById('ticketOrigin').value = '';
+            document.getElementById('ticketDestination').value = '';
+            document.getElementById('ticketDate').value = '';
+            document.getElementById('ticketTime').value = '';
+            document.getElementById('ticketCode').value = '';
+            document.getElementById('ticketLocator').value = '';
+            document.getElementById('ticketPassengers').value = '';
+
+            closeTicketModal();
+            saveData();
+        }
+        function deleteTicket(id) {
+            tripData.tickets = (tripData.tickets || []).filter(t => t.id !== id);
+            saveData();
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(tripData, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "viagem_backup.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function openPwaInstallGuide() {
+            document.getElementById('pwaModal').classList.remove('hidden');
+        }
+        function closePwaInstallGuide() {
+            document.getElementById('pwaModal').classList.add('hidden');
+        }
+
+        window.onload = function() { renderAll(); };
+    </script>
+</body>
+</html>
