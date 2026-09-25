@@ -21,7 +21,7 @@
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; font-size: 15px; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -33,246 +33,241 @@
         
         <header class="bg-indigo-600 text-white px-6 pt-6 pb-4 shadow-md shrink-0 flex items-center justify-between">
             <div>
-                <span class="text-[10px] uppercase font-bold tracking-widest text-indigo-200">Destino</span>
-                <h1 id="headerTitle" class="text-lg font-black tracking-tight truncate max-w-[200px]">Minha Viagem</h1>
+                <span class="text-xs uppercase font-bold tracking-widest text-indigo-200">Destino</span>
+                <h1 id="headerTitle" class="text-xl font-black tracking-tight truncate max-w-[200px]">Minha Viagem</h1>
             </div>
-            <div class="flex items-center space-x-1.5">
-                <button onclick="openPwaInstallGuide()" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/25 transition-all text-white" title="Como instalar no iPhone">
-                    <i class="fa-solid fa-arrow-up-from-bracket text-sm"></i>
+            <div class="flex items-center space-x-2">
+                <button onclick="openPwaInstallGuide()" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/25 transition-all text-white" title="Como instalar no iPhone">
+                    <i class="fa-solid fa-arrow-up-from-bracket text-base"></i>
                 </button>
-                <button onclick="openSettingsModal()" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/25 transition-all text-white">
-                    <i class="fa-solid fa-gear text-sm"></i>
+                <button onclick="openSettingsModal()" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/25 transition-all text-white">
+                    <i class="fa-solid fa-gear text-base"></i>
                 </button>
-                <button onclick="exportData()" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/25 transition-all text-white">
-                    <i class="fa-solid fa-download text-sm"></i>
+                <button onclick="exportData()" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/25 transition-all text-white">
+                    <i class="fa-solid fa-download text-base"></i>
                 </button>
             </div>
         </header>
 
-        <main class="flex-1 overflow-y-auto custom-scrollbar p-4 pb-24 space-y-4">
+        <main class="flex-1 overflow-y-auto custom-scrollbar p-5 pb-28 space-y-5">
 
-            <!-- DASHBOARD -->
-            <section id="view-dashboard" class="space-y-4">
-                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg">
+            <section id="view-dashboard" class="space-y-5">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs flex items-center justify-between">
+                    <div class="flex items-center space-x-3.5">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
                             <i class="fa-solid fa-calendar-day"></i>
                         </div>
                         <div>
-                            <span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400 block">Status Geral</span>
-                            <h4 id="dashCurrentDate" class="text-sm font-bold text-slate-800">--</h4>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 block">Status Geral</span>
+                            <h4 id="dashCurrentDate" class="text-base font-bold text-slate-800">--</h4>
                         </div>
                     </div>
-                    <span id="dashTodayStatus" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">--</span>
+                    <span id="dashTodayStatus" class="text-sm font-semibold px-3 py-1.5 rounded-full bg-slate-100 text-slate-600">--</span>
                 </div>
 
                 <!-- CAROUSEL DE DATAS NO DASHBOARD -->
-                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-3">
-                    <div class="flex justify-between items-center pb-2 border-b border-slate-50">
-                        <div class="flex items-center space-x-2">
-                            <button onclick="dashPrevDay()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 flex items-center justify-center transition-all text-xs" title="Dia anterior">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs space-y-4">
+                    <div class="flex justify-between items-center pb-3 border-b border-slate-50">
+                        <div class="flex items-center space-x-3">
+                            <button onclick="dashPrevDay()" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 flex items-center justify-center transition-all text-sm" title="Dia anterior">
                                 <i class="fa-solid fa-chevron-left"></i>
                             </button>
                             <div>
-                                <h5 id="dashSelectedDayTitle" class="font-bold text-slate-900 text-sm">--</h5>
-                                <p id="dashSelectedDayDate" class="text-[10px] text-slate-400">--</p>
+                                <h5 id="dashSelectedDayTitle" class="font-bold text-slate-900 text-base">--</h5>
+                                <p id="dashSelectedDayDate" class="text-xs text-slate-400">--</p>
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <button onclick="dashTodayJump()" class="text-xs text-indigo-600 font-semibold bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1.5 rounded-lg transition-all" title="Ir para hoje">
+                            <button onclick="dashTodayJump()" class="text-sm text-indigo-600 font-semibold bg-indigo-50 hover:bg-indigo-100 px-3.5 py-1.5 rounded-xl transition-all" title="Ir para hoje">
                                 Hoje
                             </button>
-                            <button onclick="dashNextDay()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 flex items-center justify-center transition-all text-xs" title="Próximo dia">
+                            <button onclick="dashNextDay()" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-600 flex items-center justify-center transition-all text-sm" title="Próximo dia">
                                 <i class="fa-solid fa-chevron-right"></i>
                             </button>
                         </div>
                     </div>
 
                     <div class="flex justify-between items-center pt-1">
-                        <h5 class="font-bold text-slate-900 text-sm">Roteiro</h5>
-                        <button onclick="switchTab('itinerary')" class="text-xs text-indigo-600 font-semibold">Gerenciar roteiro</button>
+                        <h5 class="font-bold text-slate-900 text-base">Roteiro</h5>
+                        <button onclick="switchTab('itinerary')" class="text-sm text-indigo-600 font-semibold">Gerenciar roteiro</button>
                     </div>
 
-                    <div id="dashUpcomingActivities" class="space-y-2">
+                    <div id="dashUpcomingActivities" class="space-y-3">
                         <!-- Injetado dinamicamente -->
                     </div>
                 </div>
             </section>
 
-            <!-- ROTEIRO -->
-            <section id="view-itinerary" class="hidden space-y-4">
-                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs flex items-center justify-between">
+            <section id="view-itinerary" class="hidden space-y-5">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs flex items-center justify-between">
                     <div>
-                        <h3 class="font-bold text-slate-900">Roteiro</h3>
+                        <h3 class="font-bold text-slate-900 text-base">Roteiro</h3>
                         <p class="text-xs text-slate-400">Passeios, passagens e hotéis por dia</p>
                     </div>
-                    <button onclick="openActivityModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow-md shadow-indigo-600/30">
-                        <i class="fa-solid fa-plus text-sm"></i>
+                    <button onclick="openActivityModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-md shadow-indigo-600/30">
+                        <i class="fa-solid fa-plus text-base"></i>
                     </button>
                 </div>
 
                 <!-- Horizontal Scrollable Day Selector -->
-                <div id="daysTabsContainer" class="flex space-x-2 overflow-x-auto pb-1 custom-scrollbar">
+                <div id="daysTabsContainer" class="flex space-x-2.5 overflow-x-auto pb-1 custom-scrollbar">
                     <!-- Gerado dinamicamente -->
                 </div>
 
                 <!-- Day Card -->
-                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-3">
-                    <div class="flex justify-between items-center pb-2 border-b border-slate-50">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs space-y-4">
+                    <div class="flex justify-between items-center pb-3 border-b border-slate-50">
                         <div>
-                            <h4 id="selectedDayTitle" class="font-bold text-slate-900 text-sm">--</h4>
+                            <h4 id="selectedDayTitle" class="font-bold text-slate-900 text-base">--</h4>
                             <p id="selectedDayDate" class="text-xs text-slate-400">--</p>
                         </div>
-                        <button onclick="openActivityModal()" class="text-xs text-indigo-600 font-semibold bg-indigo-50 px-3 py-1.5 rounded-lg">
+                        <button onclick="openActivityModal()" class="text-sm text-indigo-600 font-semibold bg-indigo-50 px-3.5 py-1.5 rounded-xl">
                             <i class="fa-solid fa-plus mr-1"></i> Adicionar
                         </button>
                     </div>
-                    <div id="dayHotelsList" class="space-y-2">
+                    <div id="dayHotelsList" class="space-y-3">
                         <!-- Hospedagens do dia -->
                     </div>
-                    <div id="dayTicketsList" class="space-y-2">
+                    <div id="dayTicketsList" class="space-y-3">
                         <!-- Passagens do dia -->
                     </div>
-                    <div id="dayActivitiesList" class="space-y-2.5">
+                    <div id="dayActivitiesList" class="space-y-3">
                         <!-- Atividades do dia -->
                     </div>
                 </div>
             </section>
 
-            <!-- PASSAGENS -->
-            <section id="view-tickets" class="hidden space-y-4">
-                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs flex justify-between items-center">
+            <section id="view-tickets" class="hidden space-y-5">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-slate-900">Passagens</h3>
+                        <h3 class="font-bold text-slate-900 text-base">Passagens</h3>
                         <p class="text-xs text-slate-400">Voos e trens agrupados por dia</p>
                     </div>
-                    <button onclick="openTicketModal()" class="bg-indigo-600 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow-md">
-                        <i class="fa-solid fa-plus text-sm"></i>
+                    <button onclick="openTicketModal()" class="bg-indigo-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-plus text-base"></i>
                     </button>
                 </div>
 
-                <div id="ticketsContainer" class="space-y-4">
+                <div id="ticketsContainer" class="space-y-5">
                     <!-- Passagens agrupadas -->
                 </div>
             </section>
 
-            <!-- HOSPEDAGEM -->
-            <section id="view-hotels" class="hidden space-y-4">
-                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs flex justify-between items-center">
+            <section id="view-hotels" class="hidden space-y-5">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-slate-900">Hospedagem</h3>
+                        <h3 class="font-bold text-slate-900 text-base">Hospedagem</h3>
                         <p class="text-xs text-slate-400">Hotéis e reservas</p>
                     </div>
-                    <button onclick="openHotelModal()" class="bg-indigo-600 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow-md">
-                        <i class="fa-solid fa-plus text-sm"></i>
+                    <button onclick="openHotelModal()" class="bg-indigo-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-plus text-base"></i>
                     </button>
                 </div>
 
-                <div id="hotelsContainer" class="space-y-4">
+                <div id="hotelsContainer" class="space-y-5">
                     <!-- Hotéis -->
                 </div>
             </section>
 
-            <!-- NOTAS -->
-            <section id="view-notes" class="hidden space-y-4">
-                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs flex justify-between items-center">
+            <section id="view-notes" class="hidden space-y-5">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-xs flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-slate-900">Notas & Links</h3>
+                        <h3 class="font-bold text-slate-900 text-base">Notas & Links</h3>
                         <p class="text-xs text-slate-400">Guarde informações úteis</p>
                     </div>
-                    <button onclick="openNoteModal()" class="bg-indigo-600 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow-md">
-                        <i class="fa-solid fa-plus text-sm"></i>
+                    <button onclick="openNoteModal()" class="bg-indigo-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-plus text-base"></i>
                     </button>
                 </div>
 
-                <div id="notesContainer" class="space-y-3">
+                <div id="notesContainer" class="space-y-4">
                     <!-- Notas -->
                 </div>
             </section>
         </main>
 
-        <nav class="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-slate-200 px-3 py-2 flex justify-around items-center z-30">
-            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex flex-col items-center justify-center py-1 px-1.5 text-indigo-600 transition-all">
-                <i class="fa-solid fa-house text-sm"></i>
-                <span class="text-[9px] font-semibold mt-1">Início</span>
+        <nav class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 px-3 py-2 flex justify-around items-center z-30">
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="flex flex-col items-center justify-center py-1 px-2 text-indigo-600 transition-all">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[11px] font-semibold mt-1">Início</span>
             </button>
-            <button onclick="switchTab('itinerary')" id="nav-itinerary" class="flex flex-col items-center justify-center py-1 px-1.5 text-slate-400 hover:text-indigo-600 transition-all">
-                <i class="fa-solid fa-calendar-days text-sm"></i>
-                <span class="text-[9px] font-medium mt-1">Roteiro</span>
+            <button onclick="switchTab('itinerary')" id="nav-itinerary" class="flex flex-col items-center justify-center py-1 px-2 text-slate-400 hover:text-indigo-600 transition-all">
+                <i class="fa-solid fa-calendar-days text-lg"></i>
+                <span class="text-[11px] font-medium mt-1">Roteiro</span>
             </button>
-            <button onclick="switchTab('tickets')" id="nav-tickets" class="flex flex-col items-center justify-center py-1 px-1.5 text-slate-400 hover:text-indigo-600 transition-all">
-                <i class="fa-solid fa-ticket text-sm"></i>
-                <span class="text-[9px] font-medium mt-1">Passagens</span>
+            <button onclick="switchTab('tickets')" id="nav-tickets" class="flex flex-col items-center justify-center py-1 px-2 text-slate-400 hover:text-indigo-600 transition-all">
+                <i class="fa-solid fa-ticket text-lg"></i>
+                <span class="text-[11px] font-medium mt-1">Passagens</span>
             </button>
-            <button onclick="switchTab('hotels')" id="nav-hotels" class="flex flex-col items-center justify-center py-1 px-1.5 text-slate-400 hover:text-indigo-600 transition-all">
-                <i class="fa-solid fa-hotel text-sm"></i>
-                <span class="text-[9px] font-medium mt-1">Hospedagem</span>
+            <button onclick="switchTab('hotels')" id="nav-hotels" class="flex flex-col items-center justify-center py-1 px-2 text-slate-400 hover:text-indigo-600 transition-all">
+                <i class="fa-solid fa-hotel text-lg"></i>
+                <span class="text-[11px] font-medium mt-1">Hospedagem</span>
             </button>
-            <button onclick="switchTab('notes')" id="nav-notes" class="flex flex-col items-center justify-center py-1 px-1.5 text-slate-400 hover:text-indigo-600 transition-all">
-                <i class="fa-solid fa-note-sticky text-sm"></i>
-                <span class="text-[9px] font-medium mt-1">Notas</span>
+            <button onclick="switchTab('notes')" id="nav-notes" class="flex flex-col items-center justify-center py-1 px-2 text-slate-400 hover:text-indigo-600 transition-all">
+                <i class="fa-solid fa-note-sticky text-lg"></i>
+                <span class="text-[11px] font-medium mt-1">Notas</span>
             </button>
         </nav>
     </div>
 
     <!-- MODAL: Settings -->
     <div id="settingsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-0 sm:p-4">
-        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 space-y-4 max-h-[85vh] overflow-y-auto">
-            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-                <h3 class="font-bold text-slate-900">Configurar Viagem</h3>
-                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-md p-6 space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900 text-base">Configurar Viagem</h3>
+                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4">
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Destino / Título</label>
-                    <input type="text" id="inputTripTitle" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Destino / Título</label>
+                    <input type="text" id="inputTripTitle" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Início</label>
-                        <input type="date" id="inputTripStart" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Início</label>
+                        <input type="date" id="inputTripStart" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Término</label>
-                        <input type="date" id="inputTripEnd" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Término</label>
+                        <input type="date" id="inputTripEnd" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                 </div>
             </div>
-            <div class="flex space-x-2 pt-2">
-                <button onclick="closeSettingsModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600">Cancelar</button>
-                <button onclick="saveTripSettings()" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-md">Salvar</button>
+            <div class="flex space-x-3 pt-3">
+                <button onclick="closeSettingsModal()" class="flex-1 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600">Cancelar</button>
+                <button onclick="saveTripSettings()" class="flex-1 py-3 rounded-xl bg-indigo-600 text-white text-sm font-semibold shadow-md">Salvar</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL: Activity com suporte a Maps -->
     <div id="activityModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-0 sm:p-4">
-        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 space-y-4">
-            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-                <h3 class="font-bold text-slate-900">Nova Atividade</h3>
-                <button onclick="closeActivityModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-md p-6 space-y-4">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900 text-base">Nova Atividade</h3>
+                <button onclick="closeActivityModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4">
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Dia</label>
-                    <select id="activityDaySelect" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Dia</label>
+                    <select id="activityDaySelect" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Nome do Local / Atividade</label>
-                    <input type="text" id="activityTitle" placeholder="Ex: British Museum, London" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Nome do Local / Atividade</label>
+                    <input type="text" id="activityTitle" placeholder="Ex: British Museum, London" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Endereço ou Localização Google Maps (Opcional)</label>
-                    <input type="text" id="activityLocation" placeholder="Ex: Great Russell St, London WC1B 3DG" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Endereço ou Localização Google Maps (Opcional)</label>
+                    <input type="text" id="activityLocation" placeholder="Ex: Great Russell St, London WC1B 3DG" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Horário</label>
-                        <input type="time" id="activityTime" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Horário</label>
+                        <input type="time" id="activityTime" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Categoria</label>
-                        <select id="activityCategory" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Categoria</label>
+                        <select id="activityCategory" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <option value="Passeio">Passeio</option>
                             <option value="Alimentação">Alimentação</option>
                             <option value="Transporte">Transporte</option>
@@ -281,153 +276,149 @@
                     </div>
                 </div>
             </div>
-            <div class="flex space-x-2 pt-2">
-                <button onclick="closeActivityModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600">Cancelar</button>
-                <button onclick="saveActivity()" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-md">Adicionar</button>
+            <div class="flex space-x-3 pt-3">
+                <button onclick="closeActivityModal()" class="flex-1 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600">Cancelar</button>
+                <button onclick="saveActivity()" class="flex-1 py-3 rounded-xl bg-indigo-600 text-white text-sm font-semibold shadow-md">Adicionar</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL: Note -->
     <div id="noteModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-0 sm:p-4">
-        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 space-y-4">
-            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-                <h3 class="font-bold text-slate-900">Nova Nota</h3>
-                <button onclick="closeNoteModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-md p-6 space-y-4">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900 text-base">Nova Nota</h3>
+                <button onclick="closeNoteModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4">
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Título</label>
-                    <input type="text" id="noteTitle" placeholder="Ex: Informações úteis" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Título</label>
+                    <input type="text" id="noteTitle" placeholder="Ex: Informações úteis" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Conteúdo</label>
-                    <textarea id="noteContent" rows="3" placeholder="Detalhes ou links..." class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Conteúdo</label>
+                    <textarea id="noteContent" rows="3" placeholder="Detalhes ou links..." class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
                 </div>
             </div>
-            <div class="flex space-x-2 pt-2">
-                <button onclick="closeNoteModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600">Cancelar</button>
-                <button onclick="saveNote()" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-md">Salvar</button>
+            <div class="flex space-x-3 pt-3">
+                <button onclick="closeNoteModal()" class="flex-1 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600">Cancelar</button>
+                <button onclick="saveNote()" class="flex-1 py-3 rounded-xl bg-indigo-600 text-white text-sm font-semibold shadow-md">Salvar</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL: Ticket -->
     <div id="ticketModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-0 sm:p-4">
-        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 space-y-4 max-h-[85vh] overflow-y-auto">
-            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-                <h3 class="font-bold text-slate-900">Adicionar Passagem</h3>
-                <button onclick="closeTicketModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-md p-6 space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900 text-base">Adicionar Passagem</h3>
+                <button onclick="closeTicketModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4">
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Tipo de Transporte</label>
-                    <select id="ticketType" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Tipo de Transporte</label>
+                    <select id="ticketType" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="Avião">Avião (Voo)</option>
                         <option value="Trem">Trem (Ferroviário)</option>
                         <option value="Outro">Outro</option>
                     </select>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Origem</label>
-                        <input type="text" id="ticketOrigin" placeholder="Ex: GRU" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Origem</label>
+                        <input type="text" id="ticketOrigin" placeholder="Ex: GRU" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Destino</label>
-                        <input type="text" id="ticketDestination" placeholder="Ex: LIS" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Data</label>
-                        <input type="date" id="ticketDate" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Horário</label>
-                        <input type="time" id="ticketTime" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Destino</label>
+                        <input type="text" id="ticketDestination" placeholder="Ex: LIS" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Código / Voo</label>
-                        <input type="text" id="ticketCode" placeholder="Ex: LA3402" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Data</label>
+                        <input type="date" id="ticketDate" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Localizador / PNR</label>
-                        <input type="text" id="ticketLocator" placeholder="Ex: ABC123" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Horário</label>
+                        <input type="time" id="ticketTime" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Código / Voo</label>
+                        <input type="text" id="ticketCode" placeholder="Ex: LA3402" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Localizador / PNR</label>
+                        <input type="text" id="ticketLocator" placeholder="Ex: ABC123" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Passageiros e Assentos</label>
-                    <input type="text" id="ticketPassengers" placeholder="Ex: Stevan (4A), Fernanda (4B)" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Passageiros e Assentos</label>
+                    <input type="text" id="ticketPassengers" placeholder="Ex: Stevan (4A), Fernanda (4B)" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
             </div>
-            <div class="flex space-x-2 pt-2">
-                <button onclick="closeTicketModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600">Cancelar</button>
-                <button onclick="saveTicket()" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-md">Salvar</button>
+            <div class="flex space-x-3 pt-3">
+                <button onclick="closeTicketModal()" class="flex-1 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600">Cancelar</button>
+                <button onclick="saveTicket()" class="flex-1 py-3 rounded-xl bg-indigo-600 text-white text-sm font-semibold shadow-md">Salvar</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL: Hotel -->
     <div id="hotelModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-0 sm:p-4">
-        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 space-y-4 max-h-[85vh] overflow-y-auto">
-            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-                <h3 class="font-bold text-slate-900">Adicionar Hospedagem</h3>
-                <button onclick="closeHotelModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-md p-6 space-y-4 max-h-[85vh] overflow-y-auto">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900 text-base">Adicionar Hospedagem</h3>
+                <button onclick="closeHotelModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-            <div class="space-y-3">
+            <div class="space-y-4">
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Nome do Hotel / Local</label>
-                    <input type="text" id="hotelName" placeholder="Ex: Hotel ibis London" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Nome do Hotel / Local</label>
+                    <input type="text" id="hotelName" placeholder="Ex: Hotel ibis London" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Check-in</label>
-                        <input type="date" id="hotelCheckIn" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Check-in</label>
+                        <input type="date" id="hotelCheckIn" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Check-out</label>
-                        <input type="date" id="hotelCheckOut" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Check-out</label>
+                        <input type="date" id="hotelCheckOut" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Endereço / Cidade</label>
-                    <input type="text" id="hotelAddress" placeholder="Ex: London, UK" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Confirmação / Reserva</label>
-                    <input type="text" id="hotelConfirmation" placeholder="Ex: 987654321" class="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1.5">Confirmação / Reserva</label>
+                    <input type="text" id="hotelConfirmation" placeholder="Ex: 987654321" class="w-full px-4 py-3 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
             </div>
-            <div class="flex space-x-2 pt-2">
-                <button onclick="closeHotelModal()" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600">Cancelar</button>
-                <button onclick="saveHotel()" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-md">Salvar</button>
+            <div class="flex space-x-3 pt-3">
+                <button onclick="closeHotelModal()" class="flex-1 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600">Cancelar</button>
+                <button onclick="saveHotel()" class="flex-1 py-3 rounded-xl bg-indigo-600 text-white text-sm font-semibold shadow-md">Salvar</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL: PWA Install Guide for iOS -->
     <div id="pwaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-0 sm:p-4">
-        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-sm p-6 space-y-4">
-            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-                <h3 class="font-bold text-slate-900 text-sm flex items-center">
-                    <i class="fa-solid fa-mobile-screen-button text-indigo-600 mr-2"></i> Instalar no iPhone
+        <div class="bg-white rounded-t-[30px] sm:rounded-3xl shadow-2xl w-full sm:max-w-md p-6 space-y-4">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-900 text-base flex items-center">
+                    <i class="fa-solid fa-mobile-screen-button text-indigo-600 mr-2 text-lg"></i> Instalar no iPhone
                 </h3>
-                <button onclick="closePwaInstallGuide()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="closePwaInstallGuide()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-            <div class="space-y-3 text-xs text-slate-600 leading-relaxed">
+            <div class="space-y-3.5 text-sm text-slate-600 leading-relaxed">
                 <p>Para usar este planejador como um aplicativo nativo na tela inicial do seu iPhone:</p>
-                <ol class="list-decimal pl-4 space-y-2 font-medium text-slate-700">
+                <ol class="list-decimal pl-4 space-y-2.5 font-medium text-slate-700">
                     <li>Abra esta página no navegador <strong class="text-indigo-600">Safari</strong> do seu iPhone.</li>
-                    <li>Toque no botão de Compartilhar <i class="fa-solid fa-arrow-up-from-bracket text-indigo-600 mx-0.5"></i> na barra inferior do Safari.</li>
+                    <li>Toque no botão de Compartilhar <i class="fa-solid fa-arrow-up-from-bracket text-indigo-600 mx-1"></i> na barra inferior do Safari.</li>
                     <li>Role as opções para baixo e selecione <strong class="text-slate-900">"Adicionar à Tela de Início"</strong>.</li>
                     <li>Confirme em <strong class="text-slate-900">"Adicionar"</strong> no canto superior direito. Pronto!</li>
                 </ol>
             </div>
-            <div class="pt-2">
-                <button onclick="closePwaInstallGuide()" class="w-full py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold shadow-md">Entendi</button>
+            <div class="pt-3">
+                <button onclick="closePwaInstallGuide()" class="w-full py-3 rounded-xl bg-indigo-600 text-white text-sm font-semibold shadow-md">Entendi</button>
             </div>
         </div>
     </div>
@@ -491,9 +482,9 @@
                 { id: 1, title: "Conexões importantes", content: "Atenção aos tempos de conexão em Viracopos e Madrid." }
             ],
             hotels: [
-                { id: 1, name: "Merit Kensington Hotel", checkIn: "2026-10-03", checkOut: "2026-10-07", address: "12, 16-18 & 24 Penywern Road, Earls Court, London, SW5 9SU Reino Unido", confirmation: "72077647098506" },
-                { id: 2, name: "Hampton by Hilton Amsterdam / Arena Boulevard", checkIn: "2026-10-07", checkOut: "2026-10-10", address: "Hoekenrode 1, Amsterdam, North Holland, 1102 BR Países Baixos", confirmation: "72078434462916" },
-                { id: 3, name: "Be Mate Trafalgar", checkIn: "2026-10-10", checkOut: "2026-10-13", address: "C. de Trafalgar 35, Madrid, 28010 Espanha", confirmation: "72078782114971" }
+                { id: 1, name: "Merit Kensington Hotel", checkIn: "2026-10-03", checkOut: "2026-10-07", confirmation: "72077647098506" },
+                { id: 2, name: "Hampton by Hilton Amsterdam / Arena Boulevard", checkIn: "2026-10-07", checkOut: "2026-10-10", confirmation: "72078434462916" },
+                { id: 3, name: "Be Mate Trafalgar", checkIn: "2026-10-10", checkOut: "2026-10-13", confirmation: "72078782114971" }
             ],
             tickets: [
                 { id: 1727800000001, type: "Avião", origin: "IGU", destination: "VCP", date: "2026-10-02", time: "15:20", code: "AZUL 4726", seat: "4A, 4B", passengers: "SPB; FSB", locator: "GLTDWG" },
@@ -685,12 +676,12 @@
                 const icon = t.type === 'Trem' ? 'fa-train' : 'fa-plane';
                 const paxStr = t.passengersList.join(', ');
                 ticketsHtml += `
-                    <div class="flex items-center justify-between p-2.5 bg-indigo-50/70 rounded-xl text-xs border border-indigo-100">
+                    <div class="flex items-center justify-between p-3.5 bg-indigo-50/70 rounded-xl text-sm border border-indigo-100">
                         <div>
-                            <span class="font-bold text-indigo-900 block"><i class="fa-solid ${icon} mr-1"></i> ${t.code} (${t.origin} ➔ ${t.destination})</span>
-                            <span class="text-indigo-600">${t.time || ''} • Pax: ${paxStr || 'Todos'}</span>
+                            <span class="font-bold text-indigo-900 block"><i class="fa-solid ${icon} mr-1.5"></i> ${t.code} (${t.origin} ➔ ${t.destination})</span>
+                            <span class="text-indigo-700 text-xs mt-0.5 block">${t.time || ''} • Pax: ${paxStr || 'Todos'}</span>
                         </div>
-                        <span class="bg-indigo-600 text-white px-2 py-1 rounded text-[10px] font-bold">Transporte</span>
+                        <span class="bg-indigo-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold">Transporte</span>
                     </div>
                 `;
             });
@@ -698,41 +689,66 @@
             let dayHotels = (tripData.hotels || []).filter(h => targetDayStr >= h.checkIn && targetDayStr < h.checkOut);
             let hotelsHtml = '';
             dayHotels.forEach(h => {
-                const mapsQuery = encodeURIComponent(h.name + ' ' + (h.address || ''));
+                const mapsQuery = encodeURIComponent(h.name);
                 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
                 hotelsHtml += `
-                    <div class="flex items-center justify-between p-2.5 bg-amber-50/70 rounded-xl text-xs border border-amber-100">
+                    <div class="flex items-center justify-between p-3.5 bg-amber-50/70 rounded-xl text-sm border border-amber-100">
                         <div>
-                            <span class="font-bold text-amber-900 block"><i class="fa-solid fa-hotel mr-1"></i> ${h.name}</span>
-                            <a href="${mapsUrl}" target="_blank" class="text-amber-700 hover:underline inline-flex items-center">Ver no Maps <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[9px]"></i></a>
+                            <span class="font-bold text-amber-900 block"><i class="fa-solid fa-hotel mr-1.5"></i> ${h.name}</span>
+                            <span class="text-amber-700 text-xs mt-0.5 block">Hospedagem ativa</span>
                         </div>
-                        <span class="bg-amber-600 text-white px-2 py-1 rounded text-[10px] font-bold">Hotel</span>
+                        <div class="flex items-center space-x-2">
+                            <a href="${mapsUrl}" target="_blank" class="w-9 h-9 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-600 flex items-center justify-center transition-all shadow-xs" title="Abrir no Google Maps">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                            </a>
+                            <span class="bg-amber-600 text-white px-2.5 py-1 rounded-lg text-xs font-bold">Hotel</span>
+                        </div>
                     </div>
                 `;
             });
 
             let actsHtml = '';
-            dayActs.sort((a,b) => (a.time || '').localeCompare(b.time || ''));
+            dayActs.sort((a, b) => {
+                const timeA = a.time ? a.time.trim() : '';
+                const timeB = b.time ? b.time.trim() : '';
+                if (!timeA && !timeB) return 0;
+                if (!timeA) return 1;  // Sem horário vai para o final
+                if (!timeB) return -1; // Sem horário vai para o final
+                return timeA.localeCompare(timeB);
+            });
             dayActs.forEach(act => {
                 const queryStr = encodeURIComponent(act.location ? `${act.title} ${act.location}` : act.title);
                 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${queryStr}`;
 
+                const isFood = act.category === 'Alimentação';
+                const badgeClass = isFood 
+                    ? 'bg-emerald-100 text-emerald-800' 
+                    : 'bg-indigo-50 text-indigo-600';
+
+                const cardBgClass = isFood
+                    ? 'bg-emerald-50/70 border border-emerald-100'
+                    : 'bg-slate-50';
+
                 actsHtml += `
-                    <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl text-xs">
-                        <div class="space-y-0.5">
+                    <div class="flex items-center justify-between p-3.5 ${cardBgClass} rounded-xl text-sm">
+                        <div class="space-y-1">
                             <span class="font-bold text-slate-800 block">${act.title}</span>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-slate-400">${act.time || 'Livre'} • ${act.category}</span>
-                                <a href="${mapsUrl}" target="_blank" class="text-indigo-600 font-semibold hover:underline inline-flex items-center"><i class="fa-solid fa-map-location-dot mr-1"></i> Maps</a>
+                            <div class="flex items-center space-x-3 text-xs text-slate-500 font-medium">
+                                <span>${act.time || 'Horário livre'}</span>
                             </div>
                         </div>
-                        <span class="bg-indigo-50 text-indigo-600 px-2 py-1 rounded font-medium">${act.category}</span>
+                        <div class="flex items-center space-x-2">
+                            <a href="${mapsUrl}" target="_blank" class="w-9 h-9 rounded-xl bg-white hover:bg-indigo-50 text-indigo-600 border border-slate-200/60 flex items-center justify-center transition-all shadow-xs" title="Abrir no Google Maps">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                            </a>
+                            <span class="${badgeClass} px-2.5 py-1 rounded-lg text-xs font-semibold">${act.category}</span>
+                        </div>
                     </div>
                 `;
             });
 
             if (!ticketsHtml && !hotelsHtml && !actsHtml) {
-                container.innerHTML = `<p class="text-xs text-slate-400 italic py-2 text-center">Nenhum compromisso agendado para este dia.</p>`;
+                container.innerHTML = `<p class="text-sm text-slate-400 italic py-3 text-center">Nenhum compromisso agendado para este dia.</p>`;
             } else {
                 container.innerHTML = hotelsHtml + ticketsHtml + actsHtml;
             }
@@ -750,7 +766,7 @@
             days.forEach((dayStr) => {
                 const active = dayStr === currentActiveDay;
                 container.innerHTML += `
-                    <button onclick="selectDay('${dayStr}')" class="px-3.5 py-2 rounded-xl text-xs font-semibold shrink-0 transition-all flex flex-col items-center justify-center min-w-[65px] ${active ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-100'}">
+                    <button onclick="selectDay('${dayStr}')" class="px-4 py-2.5 rounded-xl text-sm font-bold shrink-0 transition-all flex flex-col items-center justify-center min-w-[70px] ${active ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-slate-700 border border-slate-100'}">
                         <span>${formatDateShort(dayStr)}</span>
                     </button>
                 `;
@@ -773,15 +789,17 @@
                 hotelsContainer.innerHTML = '';
                 const dayHotels = (tripData.hotels || []).filter(h => currentActiveDay >= h.checkIn && currentActiveDay < h.checkOut);
                 dayHotels.forEach(h => {
-                    const mapsQuery = encodeURIComponent(h.name + ' ' + (h.address || ''));
+                    const mapsQuery = encodeURIComponent(h.name);
                     const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
                     hotelsContainer.innerHTML += `
-                        <div class="p-3 bg-amber-50/70 rounded-xl text-xs space-y-1 border border-amber-100">
+                        <div class="p-3.5 bg-amber-50/70 rounded-xl text-sm space-y-1.5 border border-amber-100">
                             <div class="font-bold text-amber-900 flex items-center justify-between">
                                 <span><i class="fa-solid fa-hotel mr-1.5 text-amber-600"></i> Hospedagem: ${h.name}</span>
-                                <a href="${mapsUrl}" target="_blank" class="text-amber-700 hover:underline font-semibold inline-flex items-center"><i class="fa-solid fa-map-location-dot mr-1"></i> Maps</a>
+                                <a href="${mapsUrl}" target="_blank" class="w-9 h-9 rounded-xl bg-white hover:bg-amber-100 text-amber-700 border border-amber-200 flex items-center justify-center transition-all shadow-xs" title="Abrir no Google Maps">
+                                    <i class="fa-solid fa-map-location-dot"></i>
+                                </a>
                             </div>
-                            <div class="text-[11px] text-amber-800">
+                            <div class="text-xs text-amber-800">
                                 Check-in: ${h.checkIn} • Check-out: ${h.checkOut}
                             </div>
                         </div>
@@ -822,14 +840,14 @@
                         const locatorsStr = Array.from(t.locatorsList).join(', ');
 
                         ticketsContainer.innerHTML += `
-                            <div class="p-3 bg-indigo-50/70 rounded-xl text-xs space-y-1.5 border border-indigo-100">
+                            <div class="p-3.5 bg-indigo-50/70 rounded-xl text-sm space-y-2 border border-indigo-100">
                                 <div class="flex justify-between items-center font-bold text-indigo-900">
-                                    <span><i class="fa-solid ${icon} mr-1"></i> ${t.code} (${t.origin} ➔ ${t.destination})</span>
-                                    <span class="text-xs text-indigo-600 font-mono">${t.time || ''}</span>
+                                    <span><i class="fa-solid ${icon} mr-1.5"></i> ${t.code} (${t.origin} ➔ ${t.destination})</span>
+                                    <span class="text-xs text-indigo-700 font-mono font-bold">${t.time || ''}</span>
                                 </div>
-                                <div class="text-[11px] text-slate-600 space-y-0.5">
-                                    <div><span class="font-semibold text-slate-700">Pax:</span> ${paxStr || 'Não especificado'}</div>
-                                    <div><span class="font-semibold text-slate-700">Assentos:</span> ${seatsStr || 'N/A'} • <span class="font-semibold text-slate-700">PNR:</span> <span class="font-mono text-indigo-700">${locatorsStr}</span></div>
+                                <div class="text-xs text-slate-700 space-y-1">
+                                    <div><span class="font-semibold text-slate-900">Pax:</span> ${paxStr || 'Não especificado'}</div>
+                                    <div><span class="font-semibold text-slate-900">Assentos:</span> ${seatsStr || 'N/A'} • <span class="font-semibold text-slate-900">PNR:</span> <span class="font-mono text-indigo-700 font-bold">${locatorsStr}</span></div>
                                 </div>
                             </div>
                         `;
@@ -842,29 +860,48 @@
                 actsContainer.innerHTML = '';
                 const acts = tripData.activities[currentActiveDay] || [];
 
-                acts.sort((a,b) => (a.time || '').localeCompare(b.time || ''));
+                acts.sort((a, b) => {
+                    const timeA = a.time ? a.time.trim() : '';
+                    const timeB = b.time ? b.time.trim() : '';
+                    if (!timeA && !timeB) return 0;
+                    if (!timeA) return 1;  // Sem horário vai para o final
+                    if (!timeB) return -1; // Sem horário vai para o final
+                    return timeA.localeCompare(timeB);
+                });
                 acts.forEach(act => {
-                    const queryStr = encodeURIComponent(act.location ? `${act.title} ${act.location}` : act.title);
-                    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${queryStr}`;
+                    const mapsQuery = encodeURIComponent(act.location ? `${act.title} ${act.location}` : act.title);
+                    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
+
+                    const isFood = act.category === 'Alimentação';
+                    const badgeClass = isFood 
+                        ? 'bg-emerald-100 text-emerald-800' 
+                        : 'bg-indigo-50 text-indigo-600';
+
+                    const cardBgClass = isFood
+                        ? 'bg-emerald-50/70 border border-emerald-100'
+                        : 'bg-slate-50';
 
                     actsContainer.innerHTML += `
-                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl text-xs">
+                        <div class="flex items-center justify-between p-3.5 ${cardBgClass} rounded-xl text-sm">
                             <div class="space-y-1">
                                 <span class="font-bold text-slate-800 block">${act.title}</span>
-                                <div class="flex items-center space-x-3 text-slate-400">
-                                    <span>${act.time || 'Horário livre'} • ${act.category}</span>
-                                    <a href="${mapsUrl}" target="_blank" class="text-indigo-600 font-semibold hover:underline inline-flex items-center">
-                                        <i class="fa-solid fa-map-location-dot mr-1"></i> Abrir no Maps
-                                    </a>
+                                <div class="flex items-center space-x-3 text-xs text-slate-500 font-medium">
+                                    <span>${act.time || 'Horário livre'}</span>
                                 </div>
                             </div>
-                            <button onclick="deleteActivity('${currentActiveDay}', '${act.id}')" class="text-slate-300 hover:text-rose-500 p-1"><i class="fa-solid fa-trash-can"></i></button>
+                            <div class="flex items-center space-x-2">
+                                <a href="${mapsUrl}" target="_blank" class="w-9 h-9 rounded-xl bg-white hover:bg-indigo-50 text-indigo-600 border border-slate-200/60 flex items-center justify-center transition-all shadow-xs" title="Abrir no Google Maps">
+                                    <i class="fa-solid fa-map-location-dot"></i>
+                                </a>
+                                <span class="${badgeClass} px-2.5 py-1 rounded-lg text-xs font-semibold">${act.category}</span>
+                                <button onclick="deleteActivity('${currentActiveDay}', '${act.id}')" class="text-slate-400 hover:text-rose-500 p-2 text-base"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
                         </div>
                     `;
                 });
 
                 if (acts.length === 0 && (tripData.tickets || []).filter(t => t.date === currentActiveDay).length === 0 && (tripData.hotels || []).filter(h => currentActiveDay >= h.checkIn && currentActiveDay < h.checkOut).length === 0) {
-                    actsContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-2 italic">Nenhum evento neste dia.</p>`;
+                    actsContainer.innerHTML = `<p class="text-sm text-slate-400 text-center py-3 italic">Nenhum evento neste dia.</p>`;
                 }
             }
         }
@@ -875,69 +912,68 @@
             container.innerHTML = '';
             
             if (!tripData.notes || tripData.notes.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4 italic">Nenhuma nota cadastrada.</p>`;
+                container.innerHTML = `<p class="text-sm text-slate-400 text-center py-6 italic">Nenhuma nota cadastrada.</p>`;
                 return;
             }
 
             tripData.notes.forEach(note => {
                 container.innerHTML += `
-                    <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-1 relative">
+                    <div class="bg-white p-4.5 rounded-2xl border border-slate-100 shadow-xs space-y-2 relative">
                         <div class="flex justify-between items-start">
-                            <h4 class="font-bold text-slate-900 text-xs">${note.title}</h4>
-                            <button onclick="deleteNote(${note.id})" class="text-slate-300 hover:text-rose-500"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                            <h4 class="font-bold text-slate-900 text-sm">${note.title}</h4>
+                            <button onclick="deleteNote(${note.id})" class="text-slate-400 hover:text-rose-500"><i class="fa-solid fa-trash-can text-sm"></i></button>
                         </div>
-                        <p class="text-xs text-slate-600 whitespace-pre-wrap">${note.content}</p>
+                        <p class="text-sm text-slate-600 whitespace-pre-wrap leading-relaxed">${note.content}</p>
                     </div>
                 `;
             });
         }
 
         function renderHotels() {
-            const container = document.getElementById('hotelsContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            
-            const hotels = tripData.hotels || [];
-            if (hotels.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4 italic">Nenhuma hospedagem cadastrada.</p>`;
-                return;
-            }
-
-            hotels.forEach(h => {
-                const mapsQuery = encodeURIComponent(h.name + ' ' + (h.address || ''));
-                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
-
-                container.innerHTML += `
-                    <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-2">
-                        <div class="flex justify-between items-center">
-                            <h4 class="font-bold text-slate-900 text-sm flex items-center">
-                                <i class="fa-solid fa-hotel text-indigo-600 mr-2"></i> ${h.name}
-                            </h4>
-                            <button onclick="deleteHotel(${h.id})" class="text-slate-300 hover:text-rose-500"><i class="fa-solid fa-trash-can text-xs"></i></button>
-                        </div>
-                        <div class="text-xs text-slate-600 space-y-1">
-                            <div><span class="font-semibold text-slate-700">Check-in:</span> ${h.checkIn || 'N/A'} • <span class="font-semibold text-slate-700">Check-out:</span> ${h.checkOut || 'N/A'}</div>
-                            <div>
-                                <span class="font-semibold text-slate-700">Local:</span> 
-                                <a href="${mapsUrl}" target="_blank" class="text-indigo-600 hover:underline inline-flex items-center">
-                                    ${h.address || 'N/A'} <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>
-                                </a>
-                            </div>
-                            <div><span class="font-semibold text-slate-700">Confirmação:</span> <span class="font-mono text-indigo-600">${h.confirmation || 'N/A'}</span></div>
-                        </div>
-                    </div>
-                `;
-            });
+        const container = document.getElementById('hotelsContainer');
+        if (!container) return;
+        container.innerHTML = '';
+        
+        const hotels = tripData.hotels || [];
+        if (hotels.length === 0) {
+            container.innerHTML = `<p class="text-sm text-slate-400 text-center py-6 italic">Nenhuma hospedagem cadastrada.</p>`;
+            return;
         }
 
-        function renderTickets() {
+        hotels.forEach(h => {
+            const mapsQuery = encodeURIComponent(h.name);
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
+
+            container.innerHTML += `
+                <div class="bg-white p-4.5 rounded-2xl border border-slate-100 shadow-xs space-y-2.5">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-slate-900 text-base flex items-center">
+                            <i class="fa-solid fa-hotel text-indigo-600 mr-2"></i> ${h.name}
+                        </h4>
+                        <div class="flex items-center space-x-2">
+                            <a href="${mapsUrl}" target="_blank" class="w-9 h-9 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-600 flex items-center justify-center transition-all shadow-xs" title="Abrir no Google Maps">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                            </a>
+                            <button onclick="deleteHotel(${h.id})" class="text-slate-400 hover:text-rose-500 p-1"><i class="fa-solid fa-trash-can text-sm"></i></button>
+                        </div>
+                    </div>
+                    <div class="text-sm text-slate-600 space-y-1.5">
+                        <div><span class="font-semibold text-slate-800">Check-in:</span> ${h.checkIn || 'N/A'} • <span class="font-semibold text-slate-800">Check-out:</span> ${h.checkOut || 'N/A'}</div>
+                        <div><span class="font-semibold text-slate-800">Confirmação:</span> <span class="font-mono font-bold text-indigo-600">${h.confirmation || 'N/A'}</span></div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function renderTickets() {
             const container = document.getElementById('ticketsContainer');
             if (!container) return;
             container.innerHTML = '';
             
             const tickets = tripData.tickets || [];
             if (tickets.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4 italic">Nenhuma passagem cadastrada.</p>`;
+                container.innerHTML = `<p class="text-sm text-slate-400 text-center py-6 italic">Nenhuma passagem cadastrada.</p>`;
                 return;
             }
 
@@ -985,34 +1021,34 @@
                     const locatorsStr = Array.from(t.locatorsList).join(', ');
 
                     dayCardsHtml += `
-                        <div class="p-3.5 bg-slate-50 rounded-xl text-xs space-y-2 border border-slate-100">
+                        <div class="p-4 bg-slate-50 rounded-xl text-sm space-y-2.5 border border-slate-100">
                             <div class="flex justify-between items-center">
-                                <span class="font-bold text-indigo-900 flex items-center">
-                                    <i class="fa-solid ${icon} mr-1.5 text-indigo-600"></i> ${t.type} - ${t.code}
+                                <span class="font-bold text-indigo-900 flex items-center text-base">
+                                    <i class="fa-solid ${icon} mr-2 text-indigo-600"></i> ${t.type} - ${t.code}
                                 </span>
-                                <button onclick="deleteTicket(${t.id})" class="text-slate-300 hover:text-rose-500"><i class="fa-solid fa-trash-can"></i></button>
+                                <button onclick="deleteTicket(${t.id})" class="text-slate-400 hover:text-rose-500 p-1"><i class="fa-solid fa-trash-can text-base"></i></button>
                             </div>
-                            <div class="flex justify-between items-center text-slate-700 font-semibold">
+                            <div class="flex justify-between items-center text-slate-800 font-bold text-base">
                                 <span>${t.origin}</span>
-                                <i class="fa-solid fa-arrow-right text-slate-300 text-[10px]"></i>
+                                <i class="fa-solid fa-arrow-right text-slate-300 text-xs"></i>
                                 <span>${t.destination}</span>
                             </div>
-                            <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-200/60 text-[11px] text-slate-600">
-                                <div><span class="font-semibold">Horário:</span> ${t.time || 'N/A'}</div>
-                                <div><span class="font-semibold">Localizador:</span> <span class="font-mono text-indigo-600">${locatorsStr || 'N/A'}</span></div>
-                                <div class="col-span-2"><span class="font-semibold">Passageiros:</span> ${paxStr || 'Não especificado'}</div>
-                                <div class="col-span-2"><span class="font-semibold">Assentos:</span> ${seatsStr || 'N/A'}</div>
+                            <div class="grid grid-cols-2 gap-2.5 pt-2 border-t border-slate-200/60 text-xs text-slate-700">
+                                <div><span class="font-semibold text-slate-900">Horário:</span> ${t.time || 'N/A'}</div>
+                                <div><span class="font-semibold text-slate-900">Localizador:</span> <span class="font-mono text-indigo-600 font-bold">${locatorsStr || 'N/A'}</span></div>
+                                <div class="col-span-2"><span class="font-semibold text-slate-900">Passageiros:</span> ${paxStr || 'Não especificado'}</div>
+                                <div class="col-span-2"><span class="font-semibold text-slate-900">Assentos:</span> ${seatsStr || 'N/A'}</div>
                             </div>
                         </div>
                     `;
                 });
 
                 container.innerHTML += `
-                    <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-xs space-y-3">
-                        <div class="pb-2 border-b border-slate-100">
-                            <h4 class="font-bold text-slate-900 text-sm">${formattedDateHeading}</h4>
+                    <div class="bg-white p-4.5 rounded-2xl border border-slate-100 shadow-xs space-y-3.5">
+                        <div class="pb-2.5 border-b border-slate-100">
+                            <h4 class="font-bold text-slate-900 text-base">${formattedDateHeading}</h4>
                         </div>
-                        <div class="space-y-2.5">
+                        <div class="space-y-3">
                             ${dayCardsHtml}
                         </div>
                     </div>
@@ -1100,18 +1136,16 @@
             const name = document.getElementById('hotelName').value.trim();
             const checkIn = document.getElementById('hotelCheckIn').value;
             const checkOut = document.getElementById('hotelCheckOut').value;
-            const address = document.getElementById('hotelAddress').value.trim();
             const confirmation = document.getElementById('hotelConfirmation').value.trim();
 
             if (!name) return;
 
             if (!tripData.hotels) tripData.hotels = [];
-            tripData.hotels.push({ id: Date.now(), name, checkIn, checkOut, address, confirmation });
+            tripData.hotels.push({ id: Date.now(), name, checkIn, checkOut, confirmation });
 
             document.getElementById('hotelName').value = '';
             document.getElementById('hotelCheckIn').value = '';
             document.getElementById('hotelCheckOut').value = '';
-            document.getElementById('hotelAddress').value = '';
             document.getElementById('hotelConfirmation').value = '';
 
             closeHotelModal();
